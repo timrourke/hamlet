@@ -1,0 +1,30 @@
+/* Coolors Exported Palette - coolors.co/242331-533e2d-a27035-b88b4a-ddca7d */
+
+/*
+#444433
+#998877
+#ffffff
+#ddddcc
+#ccbb99
+#554422
+#aa8855
+#ffffff
+#eeddcc
+#ddbb88
+
+*/
+
+$night: #242331; //rgba(36, 35, 49, 100)
+$burnt: #533e2d; //rgba(83, 62, 45, 100)
+$gold: #ECD077; //rgba(162, 112, 53, 100)
+$orange: $gold;
+$yellow: #b88b4a; //rgba(184, 139, 74, 100)
+$lightyellow: #ddca7d; //rgba(221, 202, 125, 100)
+
+$neutral-input-color: $yellow;
+$confirm-input-color: $lightyellow;
+$active-input-color: $lightyellow;
+
+$color__link: $gold;
+$color__link-hover: saturate(lighten($gold, 25%), 80%);
+$color__link-visited: $gold;

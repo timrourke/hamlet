@@ -1,0 +1,34 @@
+a {
+  transition:all 0.3s ease-in-out;
+	background-color: transparent;
+}
+
+a:active,
+a:hover {
+	outline: 0;
+}
+
+a {
+	color: $color__link;
+
+	&:visited {
+		color: $color__link-visited;
+	}
+	&:hover,
+	&:focus,
+	&:active {
+		color: $color__link-hover;
+	}
+	&:focus {
+		outline:2px solid rgba(0,0,0,0.25);
+	}
+	&:hover,
+	&:active {
+		outline: 0;
+	}
+	@extend %hover-color-orange;
+}
+
+.footnote__link {
+	@include typl8-smallcaps(#444, 400);
+}

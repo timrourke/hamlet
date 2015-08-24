@@ -1,0 +1,28 @@
+//Clean sticky footer
+html, body {
+  height:100%;
+  color: $typl8-copy-color;
+}
+
+body {
+	background-image:linear-gradient(to bottom, rgba(140,123,100,0.5), rgba(140,123,100,0.5)), url('/assets/images/backgrounds/billie_holiday.png');	
+}
+
+#act__container {
+	list-style-type: none;
+	padding:1em;
+	margin:0;
+}
+
+.line__content {
+	display:block;
+	margin:0 auto;
+	width:100%;
+	max-width:30em;
+}
+
+.character {
+	float:left;
+	font-variant: small-caps;
+	font-weight: 300;
+}

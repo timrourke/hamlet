@@ -1,0 +1,11 @@
+//Adobe Jenson Pro
+//Weights: 300, 400, reg and italic
+$serif: "adobe-jenson-pro", serif;
+
+//Adobe Jenson Pro Display
+//Weights: 700 only, reg and italic
+$heading-font: "adobe-jenson-pro-display", serif;
+
+html {
+	font-family:$serif;
+}

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hamlet</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.2/backbone.js"></script>
+	<script type="text/javascript" src="/assets/js/play.min.js"></script>
+
+	<script>
+	  (function(d) {
+	    var config = {
+	      kitId: 'rjv2zrb',
+	      scriptTimeout: 3000,
+	      async: true
+	    },
+	    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='//use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+	  })(document);
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+</head>
+<body>
+
+	<%= yield %>
+
+	<div class="play col-group">
+		<ul id="act__container" class="col-3-4">
+		
+		</ul>
+
+		<ul id="play__navigation" class="col-1-4 col-last">
+			
+		</ul>
+	</div>
+
+	
+	
+	<script type="text/javascript">
+
+		Backbone.View.prototype.close = function () {
+		  this.$el.empty();
+		  this.unbind();
+		};
+
+		var hamlet = hamlet || {};
+
+		hamlet.ActNavigationModel = Backbone.Model.extend({
+			initialize: function() {
+				console.log('new hamlet.ActNavigationModel instantiated');
+			}
+		});
+
+		hamlet.ActNavigationItemView = Backbone.View.extend({
+			tagName: 'li',
+			initialize: function() {
+				var self = this;
+				this.template = _.template($('#actNavigationItemViewTemplate').html());
+				this.model.on('change', function() {
+					self.render();
+				});
+				self.render();
+			},
+			render: function() {
+				this.$el.html(this.template(this.model.attributes))
+			}
+		});
+
+		hamlet.ActsNavigationMenu = Backbone.Collection.extend({
+			model: hamlet.ActNavigationModel
+		});
+
+		hamlet.ActsNavigationView = Backbone.View.extend({
+			render: function() {
+				var self = this;
+				var actCounter = 1;
+				this.collection.each(function(model) {
+					model.set('actNumber', actCounter);
+					var actNavigationItemView = new hamlet.ActNavigationItemView({
+						model: model
+					}, this);
+					self.$el.append(actNavigationItemView.el);
+					actCounter++;
+				});
+			}
+		})
+
+		hamlet.LineModel = Backbone.Model.extend({
+			initialize: function() {
+				console.log('new hamlet.LineModel instantiated');
+			}
+		});
+
+		hamlet.Scene = Backbone.Collection.extend({
+			model: hamlet.LineModel
+		});
+
+		hamlet.SceneView = Backbone.View.extend({
+			initialize: function() {
+				console.log('Initializing ActView.');
+			},
+			render: function() {
+				var self = this;
+				this.collection.each(function(model) {
+					var lineView = new hamlet.LineView({
+						model: model
+					}, this);
+					self.$el.append(lineView.el);
+				});
+				return this;
+			},
+		});
+
+		hamlet.LineView = Backbone.View.extend({
+			tagName: 'li',
+			initialize: function() {
+				var self = this;
+				this.template = _.template($('#lineTemplate').html());
+				this.model.on('change', function() {
+					self.render();
+				});
+				self.render();
+			},
+			render: function() {
+				this.$el.html(this.template(this.model.attributes));
+				return this;
+			}
+		});
+
+		hamlet.ActRouter = Backbone.Router.extend({
+			routes: {
+				"": "index",
+				"act/:act/scene/:scene": "act"
+			},
+
+			index: function() {
+				
+			},
+
+			act: function(act, scene) {
+				if (hamlet.sceneView) {
+					hamlet.sceneView.close();	
+				}
+
+				var lines = acts[act-1].scenes[scene-1].lines;
+				hamlet.scene = new hamlet.Scene(lines);
+
+				hamlet.sceneView = new hamlet.SceneView({
+					el: $('#act__container'),
+					collection: hamlet.scene
+				}).render();
+			}
+		});
+		
+		
+
+		// Use absolute URLs  to navigate to anything not in your Router.
+		var openLinkInTab = false;
+
+		// Only need this for pushState enabled browsers
+		if (Backbone.history && Backbone.history._hasPushState) {
+		  $(document).keydown(function(event) {
+		    if (event.ctrlKey || event.keyCode === 91) {
+		      openLinkInTab = true;
+		    }
+		  });
+		  
+		  $(document).keyup(function(event) {
+		    openLinkInTab = false;
+		  });
+
+		  // Use delegation to avoid initial DOM selection and allow all matching elements to bubble
+		  $(document).delegate("a", "click", function(evt) {
+		    // Get the anchor href and protcol
+		    var href = $(this).attr("href");
+		    var protocol = this.protocol + "//";
+
+		    // Ensure the protocol is not part of URL, meaning its relative.
+		    // Stop the event bubbling to ensure the link will not cause a page refresh.
+		    if (!openLinkInTab && href.slice(protocol.length) !== protocol) {
+		      evt.preventDefault();
+
+		      // Note by using Backbone.history.navigate, router events will not be
+		      // triggered.  If this is a problem, change this to navigate on your
+		      // router.
+		      Backbone.history.navigate(href, true);
+		    }
+		  });
+
+		}
+
+		$(document).on('ready', function() {
+
+			new hamlet.ActRouter;
+			Backbone.history.start({ pushState: true });
+
+			var lines = acts[0].scenes[0].lines;
+
+			hamlet.scene = new hamlet.Scene(lines);
+			hamlet.sceneView = new hamlet.SceneView({
+				el: $('#act__container'),
+				collection: hamlet.scene
+			}).render();
+			
+			hamlet.actNavigationMenu = new hamlet.ActsNavigationMenu(acts);
+			hamlet.actsNavigationView = new hamlet.ActsNavigationView({
+				el: $('#play__navigation'),
+				collection: hamlet.actNavigationMenu
+			}).render();
+
+		});
+
+	</script>
+
+	<script type="text/template" id="lineTemplate">
+		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%%= line %></span></p>
+	</script>
+
+	<script type="text/template" id="actNavigationItemViewTemplate">
+		<h5>Act <%%= actNumber %></h5>
+		<ul>
+		<%% var sceneCounter = 1; %>
+		<%% _.each(scenes, function(scene){ %>
+			<a href="/act/<%%= actNumber %>/scene/<%%= sceneCounter %>" rel="bookmark">	
+				<li>
+					<h6><%%= scene.name %>&mdash;<%%= scene.setting %></h6>
+				</li>
+			</a>
+		<%% sceneCounter++; %>
+		<%% }); %>
+		</ul>
+	</script>
+</body>
+</html>
