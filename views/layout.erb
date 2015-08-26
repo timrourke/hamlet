@@ -24,7 +24,22 @@
 </head>
 <body>
 
-	<%= yield %>
+	<div class="site-header">
+		<div class="utility-nav">
+			<form action="/" method="post" id="js-login-form">
+				<input type="email" name="email">
+				<input type="password" name="password">
+				<input type="submit" value="Log In">
+			</form>
+			<a id="js-logout" href="/api/logout">Log out</a>
+		</div>
+
+		<div class="site-branding">
+			<h1 class="site-title">
+				<a href="/" rel="bookmark">Hamlet</a>
+			</h1>
+		</div>
+	</div>
 
 	<div class="play col-group">
 		<ul id="act__container" class="col-3-4">
@@ -160,7 +175,7 @@
 		var openLinkInTab = false;
 
 		// Only need this for pushState enabled browsers
-		if (Backbone.history && Backbone.history._hasPushState) {
+		if (Backbone.history) {
 		  $(document).keydown(function(event) {
 		    if (event.ctrlKey || event.keyCode === 91) {
 		      openLinkInTab = true;
@@ -172,7 +187,7 @@
 		  });
 
 		  // Use delegation to avoid initial DOM selection and allow all matching elements to bubble
-		  $(document).delegate("a", "click", function(evt) {
+		  $(document).on('click', "a", function(evt) {
 		    // Get the anchor href and protcol
 		    var href = $(this).attr("href");
 		    var protocol = this.protocol + "//";

@@ -74,13 +74,13 @@ input[type="url"],
 input[type="password"],
 input[type="search"] {
   position:relative;
-  height:u(2.5rem);
+  height:u(2rem);
   border:0;
   border-radius:0;
   display:inline-block;
   margin: $typl8-indent-val/2 auto;
   padding:0 0.5em;
-  font-size:1em;
+  font-size:0.8em;
   border: u(.075rem) solid #ddd;
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -123,7 +123,7 @@ fieldset,
 .file,
 textarea {
   margin: $typl8-indent-val/2 auto;
-  font-size:1em;
+  font-size:0.8em;
 }
 
 textarea {
@@ -151,10 +151,10 @@ label.control,
 input[type="submit"],
 button,
 .button {
-font-size:1em;
+  font-size:0.8em;
   font-weight:700;
   text-transform:uppercase;
-  height:u(2.5rem);
+  height:u(2rem);
   margin: $typl8-indent-val/2 auto;
   padding:0 1em;
   display: inline-block;
@@ -310,7 +310,7 @@ button {
  */
 
 .select {
-  height:u(2.5rem);
+  height:u(2rem);
   position: relative;
   display: block;
   float:left;
@@ -429,7 +429,7 @@ button {
   display: block;
   float:left;
   cursor: pointer;
-  height: u(2.5rem);
+  height: u(2rem);
 }
 .file input {
   min-width: u(14rem);
@@ -443,7 +443,7 @@ button {
   right: 0;
   left: 0;
   z-index: 5;
-  height: u(2.5rem);
+  height: u(2rem);
   padding: u(.5rem) u(1rem);
   background-color: #fff;
   border: u(.075rem) solid #ddd;
@@ -464,7 +464,7 @@ button {
   z-index: 6;
   display: block;
   content: "Browse";
-  height: u(2.5rem);
+  height: u(2rem);
   padding: u(.5rem) u(1rem);
   background-color: #eee;
   border: u(.075rem) solid #ddd;
