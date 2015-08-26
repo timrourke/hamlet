@@ -164,7 +164,8 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 
 hamlet.blueprints.ModalView = Backbone.View.extend({
 	events: {
-		'click .modal__dismiss': 'dismiss'
+		'click .modal__dismiss': 'dismiss',
+		'click .modal__requestNewConfirmationEmail': 'requestNewConfirmationEmail'
 	},
 	initialize: function() {
 		var self = this;
@@ -182,6 +183,22 @@ hamlet.blueprints.ModalView = Backbone.View.extend({
 		$('.overlay').removeClass('open');
 		this.model.destroy();
 		this.close();
+	},
+	requestNewConfirmationEmail: function() {
+		$('.overlay').removeClass('open');
+		this.model.destroy();
+		this.close();
+		var modalObj = {
+			heading: 'Request New Confirmation Email',
+			body: 'Please submit your email address and password to request a new confirmation email.',
+			form: $('#requestNewConfirmationEmailTemplate').html(),
+			controls: [{
+				class: 'modal__dismiss',
+				value: 'Cancel'
+			}]
+		};
+
+		renderModal(modalObj);
 	}
 });
 
@@ -190,6 +207,62 @@ hamlet.blueprints.Modal = Backbone.Model.extend({
 		console.log('A Modal has been born.');
 	}
 });
+
+hamlet.active.requestNewConfirmationEmail = function(obj) {
+
+	console.log(obj);
+
+	var formId = '#js-request-new-confirmation-email-form';
+
+	$(formId).find('input, textarea').prop('disabled', true);
+
+	console.log($(formId));
+
+	if (obj.user_email == '' || obj.user_password == '') {
+		appendFormMessage(formId, 'error', 'Please be sure to provide your email address and password.');
+		return false;
+	}
+
+	reqNewConfEmailObj = {
+		url: window.location.protocol + '//' + window.location.host + '/api/users/request-new-confirmation-email',
+		method: 'POST',
+		dataType: 'json',
+		data: obj,
+		success: function(response) {
+			console.log(response);
+			var modalObj = {
+				heading: response.status.toProperCase(),
+				body: response.message,
+				controls: [{
+					class: 'modal__dismiss',
+					value: 'OK'
+				}]
+			}
+
+			renderModal(modalObj);
+		},
+		error: function(error) {
+			console.log(error);
+			var modalObj = {
+				heading: error.responseJSON.status.toProperCase(),
+				body: error.responseJSON.message,
+				controls: [{
+					class: 'modal__dismiss',
+					value: 'OK'
+				},{
+					class: 'modal__requestNewConfirmationEmail',
+					value: 'Request New Confirmation Email'
+				}]
+			}
+
+			renderModal(modalObj);
+		}
+	}
+
+	$.ajax(reqNewConfEmailObj);
+
+	return true;
+};
 
 /*
  *	User Model Classes
@@ -301,6 +374,9 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 					controls: [{
 						class: 'modal__dismiss',
 						value: 'OK'
+					},{
+						class: 'modal__requestNewConfirmationEmail',
+						value: 'Request New Confirmation Email'
 					}]
 				}
 
@@ -310,10 +386,6 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 
 		$.ajax(uuidRequest);
 
-		console.log(uuidRequest.url);
-
-		
-		
 	}
 });
 
@@ -386,6 +458,20 @@ $(document).on('ready', function() {
 		var obj = collectInputs('#js-signup-form');
 
 		hamlet.active.createUser(obj);
+
+	});
+
+	$('body').on('submit', '#js-request-new-confirmation-email-form', function(e) {
+
+		console.log('triggered');
+
+		e.preventDefault();
+
+		var obj = collectInputs('#js-request-new-confirmation-email-form');
+
+		console.log(obj);
+
+		hamlet.active.requestNewConfirmationEmail(obj);
 
 	});
 

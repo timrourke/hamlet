@@ -218,23 +218,6 @@ class UsersController < ApplicationController
 		end
 	end
 
-	get '/request-new-confirmation-email' do
-  #change this to display view for getting a new confirmation email
-
-
-
-  #   if session[:user]
-  #     @current_user = User.find(session[:user])
-  #   else
-  #     @current_user = nil
-  #   end
-
-		# #NONCE_SECRET should be complex string, saved in /.config/nonce_configuration.rb
-		# @nonce = Rack::Auth::Digest::Nonce.new(Time.now, NONCE_SECRET)
-
-		# erb :'users/request-new-confirmation-email', :locals => {'body_class' => 'users users--request-new-confirmation-email'}
-	end
-
 	post '/request-new-confirmation-email' do	
 		@user = User.find_by(:user_email => params[:user_email])
 
@@ -253,30 +236,43 @@ class UsersController < ApplicationController
 
 					send_email_confirm_message(@email_destination, @confirmation_route)
 
-					erb :'users/thanks-signup', :locals => {'body_class' => 'users users--signup'}
+					#Success, send user a new email confirmation link.
+					content_type :json
+					status 200
+					return_message = {
+						:status => 'success',
+						:message => "Success! Check your email inbox for a confirmation message."
+					}
+					return_message.to_json
 				else
-					flash.message = "Sorry, there was a problem sending you a new account confirmation email. Please try again."
-					redirect back
+					#DB/Server failure. Prompt user to try again.
+					content_type :json
+					status 500
+					return_message = {
+						:status => 'error',
+						:message => "Sorry, we were unable to send a new confirmation email. Please try again."
+					}
+					return_message.to_json
 				end
 			else
-				flash.message = {
-					:message => "Your username or password were incorrect. Please try again.",
-					:message_class => "alert-warning"
+				#Bad email/password.
+				content_type :json
+				status 401
+				return_message = {
+					:status => 'error',
+					:message => "Your email address or password were incorrect. Please try again."
 				}
-				#NONCE_SECRET should be complex string, saved in /.config/nonce_configuration.rb
-				@nonce = Rack::Auth::Digest::Nonce.new(Time.now, NONCE_SECRET)
-
-				redirect back
+				return_message.to_json
 			end
 		else
-			flash.message = {
-				:message => "Your username or password were incorrect. Please try again.",
-				:message_class => "alert-warning"
+			#Couldn't find user.
+			content_type :json
+			status 401
+			return_message = {
+				:status => 'error',
+				:message => "Your email address or password were incorrect. Please try again."
 			}
-			#NONCE_SECRET should be complex string, saved in /.config/nonce_configuration.rb
-			@nonce = Rack::Auth::Digest::Nonce.new(Time.now, NONCE_SECRET)
-
-			redirect back
+			return_message.to_json
 		end
 	end
 
