@@ -15,3 +15,14 @@ CREATE TABLE users (
   email_confirmation_route varchar(50),
   email_confirmation_expiry timestamp
 );
+
+CREATE TABLE comments (
+	id SERIAL PRIMARY KEY,
+	user_id integer,
+	created timestamp NOT NULL,
+	modified timestamp,
+	act integer,
+	scene integer,
+	line integer,
+	comment text
+);

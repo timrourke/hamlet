@@ -1,3 +1,9 @@
+//Add toProperCase() method to String prototype for easy case manipulation
+//Credit: http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+String.prototype.toProperCase = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 //Form input helper - parses form for inputs and textareas and
 //packages them into a POJO for submission via Backbone's AJAX
 function collectInputs(formId) {
@@ -12,6 +18,42 @@ function collectInputs(formId) {
 	});
 
 	return result;
+}
+
+function appendFormMessage(formId, status, message) {
+	var statusClass;
+
+	switch (status) {
+		case 'error':
+			statusClass = 'form--error';
+			break;
+		case 'success':
+			statusClass = 'form--success';
+			break;
+		default:
+			statusClass = 'form--success';
+			break;
+	}
+
+	var $form = $(formId);
+
+	$form.addClass(statusClass);
+
+	$form.children('.form__feedback').html(status.toProperCase() + '! ' + message);
+
+	$form.find('input, textarea').prop('disabled', false);
+
+	return true;
+}
+
+function renderModal(modalObj) {
+	$('.overlay').addClass('open');
+
+	hamlet.active.modal = new hamlet.blueprints.Modal(modalObj);
+	hamlet.active.modalView = new hamlet.blueprints.ModalView({
+		el: $('.overlay'),
+		model: hamlet.active.modal
+	}).render();
 }
 
 Backbone.View.prototype.close = function () {
@@ -116,6 +158,40 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 });
 
 /*
+ *	Modal Classes
+ *
+ */
+
+hamlet.blueprints.ModalView = Backbone.View.extend({
+	events: {
+		'click .modal__dismiss': 'dismiss'
+	},
+	initialize: function() {
+		var self = this;
+		this.template = _.template($('#modalTemplate').html());
+		this.model.on('change', function() {
+			self.render();
+		});
+		self.render();
+	},
+	render: function() {
+		this.$el.html(this.template(this.model.attributes));
+		return this;
+	},
+	dismiss: function() {
+		$('.overlay').removeClass('open');
+		this.model.destroy();
+		this.close();
+	}
+});
+
+hamlet.blueprints.Modal = Backbone.Model.extend({
+	initialize: function() {
+		console.log('A Modal has been born.');
+	}
+});
+
+/*
  *	User Model Classes
  *
  */
@@ -136,15 +212,36 @@ hamlet.blueprints.Users = Backbone.Collection.extend({
 
 hamlet.active.createUser = function(obj) {
 
+	var formId = '#js-signup-form';
+
+	$(formId).find('input, textarea').prop('disabled', true);
+
 	if (!obj.user_name || !obj.user_email || !obj.user_password || !obj.user_password_confirm) {
-		console.log('You are missing a parameter!');
+		appendFormMessage(formId, 'error', 'You are missing a parameter!');
 		return false;
 	} else if (obj.user_password != obj.user_password_confirm) {
-		console.log('Your password must match your password confirmation!');
+		appendFormMessage(formId, 'error', 'Your password must match your password confirmation!');
 		return false;
 	}
 
-	hamlet.active.users.create(obj);
+	hamlet.active.users.create(obj, {
+		wait: true,
+
+		success: function(model, response, options){
+			appendFormMessage(formId, response.status, response.message);
+		},
+		error: function(model, response, options) {
+			var statusCode = response.status;
+
+			switch (statusCode) {
+				default:
+					appendFormMessage(formId, response.responseJSON.status, response.responseJSON.message);
+					break;
+			}
+
+			return false;
+		}
+	});
 
 	return true;
 };
@@ -157,6 +254,7 @@ hamlet.active.createUser = function(obj) {
 hamlet.active.ActRouter = Backbone.Router.extend({
 	routes: {
 		"": "index",
+		"users/confirm-email/:uuid": "confirmUser",
 		"act/:act/scene/:scene": "act"
 	},
 
@@ -176,6 +274,46 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 			el: $('#act__container'),
 			collection: hamlet.active.scene
 		}).render();
+	},
+
+	confirmUser: function(uuid) {
+		uuidRequest = {
+			url: window.location.protocol + '//' + window.location.host + '/api/users/confirm-email/' + uuid,
+			dataType: 'json',
+			success: function(response) {
+				console.log(response);
+				var modalObj = {
+					heading: response.status.toProperCase(),
+					body: response.message,
+					controls: [{
+						class: 'modal__dismiss',
+						value: 'OK'
+					}]
+				}
+
+				renderModal(modalObj);
+			},
+			error: function(error) {
+				console.log(error);
+				var modalObj = {
+					heading: error.responseJSON.status.toProperCase(),
+					body: error.responseJSON.message,
+					controls: [{
+						class: 'modal__dismiss',
+						value: 'OK'
+					}]
+				}
+
+				renderModal(modalObj);
+			}
+		}
+
+		$.ajax(uuidRequest);
+
+		console.log(uuidRequest.url);
+
+		
+		
 	}
 });
 
@@ -247,7 +385,7 @@ $(document).on('ready', function() {
 
 		var obj = collectInputs('#js-signup-form');
 
-		hamlet.active.users.create(obj);
+		hamlet.active.createUser(obj);
 
 	});
 

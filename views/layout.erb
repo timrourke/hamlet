@@ -23,10 +23,10 @@
 	<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 </head>
 <body>
-
 	<div class="site-header">
 		<div class="utility-nav">
 			<form action="/api/users/login" method="post" id="js-login-form">
+				<div class="form__feeback"></div>
 				<input type="email" name="email">
 				<input type="password" name="password">
 				<input type="submit" value="Log In">
@@ -44,6 +44,7 @@
 	<div class="form__signup">
 		<h3>Sign Up</h3>
 		<form action="api/users/signup" method="post" id="js-signup-form">
+			<div class="form__feedback"></div>
 			<input type="text" name="user_name" id="user_name" placeholder="Your username">
 			<input type="email" name="user_email" id="user_email" placeholder="Your email">
 			<input type="password" name="user_password" id="user_password">
@@ -82,5 +83,19 @@
 		<%% }); %>
 		</ul>
 	</script>
+
+	<script type="text/template" id="modalTemplate">
+		<div class="modal">
+			<button class="modal__dismiss modal__dismiss--top">×</button>
+			<h5 class="modal__heading"><%%= heading %></h5>
+			<p class="modal__body"><%%= body %></p>
+			<div class="modal__controls">
+				<%% for (var i in controls) { %>
+					<button class="<%%= controls[i].class %>" type="button"><%%= controls[i].value %></button>
+				<%% }; %>
+			</div>
+		</div>
+	</script>
+	<div class="overlay"></div>
 </body>
 </html>

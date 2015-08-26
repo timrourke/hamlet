@@ -40,6 +40,16 @@ class UsersController < ApplicationController
 		})
 	end
 
+	get '/errortest' do
+		content_type :json
+		status 500
+		return_message = {
+			:status => 'error',
+			:message => "Sorry, there was a problem creating you as a user. Please try again."					
+		}
+		return_message.to_json
+	end
+
 	get '/' do
 		#replace this eventually with a json object of all users
 		@users = User.all.to_json
@@ -49,15 +59,25 @@ class UsersController < ApplicationController
 		request.body.rewind
 		@request_body = JSON.parse(request.body.read.to_s)
 
-		puts @request_body['user_email'].to_json
-
 		if self.does_user_exist?(@request_body['user_email'].downcase)
 			#return early if user already exists
-			raise "Sorry, this email address is already registered. Please use a unique email address."
+			content_type :json
+			status 400
+			return_message = {
+				:status => 'error',
+				:message => "Sorry, this email address is already registered. Please use a unique email address."					
+			}
+			return_message.to_json
 
 		elsif (@request_body['user_password'].to_s != @request_body['user_password_confirm'].to_s)
 			#return early if password doesn't match confirmation password
-			raise "Your passwords did not match. Please try again."
+			content_type :json
+			status 400
+			return_message = {
+				:status => 'error',
+				:message => "Your passwords did not match. Please try again."
+			}
+			return_message.to_json
 
 		else
 			@new_user = User.new
@@ -71,7 +91,7 @@ class UsersController < ApplicationController
 
 			@email_destination = @new_user.user_email
 			#TODO: remove port in production, or otherwise normalize req uri
-			@confirmation_route = request.host + ':' + request.port.to_s + '/api/users/confirm-email/' + @new_user.email_confirmation_route
+			@confirmation_route = request.host + ':' + request.port.to_s + '/users/confirm-email/' + @new_user.email_confirmation_route
 
 			password_salt = BCrypt::Engine.generate_salt
 			password_hash = BCrypt::Engine.hash_secret(@request_body['user_password'], password_salt)
@@ -138,4 +158,126 @@ class UsersController < ApplicationController
 		@request_body = JSON.parse(request.body.read.to_s)
 		#update specific user
 	end
+
+	get '/confirm-email/:uuid' do
+		@user = User.find_by(:email_confirmation_route => params[:uuid])
+
+		if @user
+			if @user.email_confirmed == true
+				#user already confirmed.
+				content_type :json
+				status 400
+				return_message = {
+					:status => 'error',
+					:message => "You have already confirmed your email. You may now log in."
+				}
+				return_message.to_json
+			elsif confirmation_link_valid?(@user)
+				#if confirmation link has not expired, save user as now confirmed.
+				#also delete confirmation route from user to prevent retrying.
+				@user.email_confirmed = true
+				@user.email_confirmation_route = ""
+				if @user.save
+					#success, save user.
+					content_type :json
+					status 200
+					return_message = {
+						:status => 'success',
+						:message => "Success! You have successfully confirmed your email. You may now log in."
+					}
+					return_message.to_json
+				else
+					#couldn't save user.
+					content_type :json
+					status 500
+					return_message = {
+						:status => 'error',
+						:message => "Sorry, there was a problem registering your email address. Please check that the link you supplied was correct."
+					}
+					return_message.to_json
+				end
+			else
+				#confirmation link has expired.
+				content_type :json
+				status 401
+				return_message = {
+					:status => 'error',
+					:message => "Sorry, there was a problem registering your email address. Please check that the link you supplied was correct."
+				}
+				return_message.to_json
+			end
+		else
+			#user not found by uuid.
+			content_type :json
+			status 404
+			return_message = {
+				:status => 'error',
+				:message => "Sorry, there was a problem registering your email address. Please check that the link you supplied was correct."
+			}
+			return_message.to_json
+		end
+	end
+
+	get '/request-new-confirmation-email' do
+  #change this to display view for getting a new confirmation email
+
+
+
+  #   if session[:user]
+  #     @current_user = User.find(session[:user])
+  #   else
+  #     @current_user = nil
+  #   end
+
+		# #NONCE_SECRET should be complex string, saved in /.config/nonce_configuration.rb
+		# @nonce = Rack::Auth::Digest::Nonce.new(Time.now, NONCE_SECRET)
+
+		# erb :'users/request-new-confirmation-email', :locals => {'body_class' => 'users users--request-new-confirmation-email'}
+	end
+
+	post '/request-new-confirmation-email' do	
+		@user = User.find_by(:user_email => params[:user_email])
+
+		if @user
+			if @user.password_hash == BCrypt::Engine.hash_secret(params[:user_password], @user.password_salt)
+				@user.modified = Time.now
+				@user.email_confirmed = false
+				@user.email_confirmation_route = SecureRandom.uuid
+				@user.email_confirmation_expiry = Time.now + 30*60
+
+				@email_destination = @user.user_email
+				#TODO: remove port in production, or otherwise normalize req uri
+				@confirmation_route = request.host + ':' + request.port.to_s + '/users/confirm-email/' + @user.email_confirmation_route
+
+				if @user.save
+
+					send_email_confirm_message(@email_destination, @confirmation_route)
+
+					erb :'users/thanks-signup', :locals => {'body_class' => 'users users--signup'}
+				else
+					flash.message = "Sorry, there was a problem sending you a new account confirmation email. Please try again."
+					redirect back
+				end
+			else
+				flash.message = {
+					:message => "Your username or password were incorrect. Please try again.",
+					:message_class => "alert-warning"
+				}
+				#NONCE_SECRET should be complex string, saved in /.config/nonce_configuration.rb
+				@nonce = Rack::Auth::Digest::Nonce.new(Time.now, NONCE_SECRET)
+
+				redirect back
+			end
+		else
+			flash.message = {
+				:message => "Your username or password were incorrect. Please try again.",
+				:message_class => "alert-warning"
+			}
+			#NONCE_SECRET should be complex string, saved in /.config/nonce_configuration.rb
+			@nonce = Rack::Auth::Digest::Nonce.new(Time.now, NONCE_SECRET)
+
+			redirect back
+		end
+	end
+
 end
