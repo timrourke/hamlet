@@ -2,6 +2,10 @@ class ApplicationController < Sinatra::Base
 	require 'bundler'
 	Bundler.require()
 
+	Dir.glob('./.config/*.rb').each{
+		|file| require file
+	}
+
 	ActiveRecord::Base.establish_connection(
 		:adapter	=> 'postgresql',
 		:database	=> 'hamlet'
