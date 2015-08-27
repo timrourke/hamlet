@@ -1,10 +1,9 @@
 // Method to override Backbone's .sync() method with additional headers containing our token
 // Store "old" sync function
-var backboneSync = Backbone.sync
+var backboneSync = Backbone.sync;
 
 // Now override
 Backbone.sync = function (method, model, options) {
-
   /*
    * "options" represents the options passed to the underlying $.ajax call         
    */
@@ -96,6 +95,39 @@ hamlet.blueprints = hamlet.blueprints || {};
 hamlet.active = hamlet.active || {};
 
 /*
+ *	Hamlet Play Classes
+ *
+ */
+
+hamlet.blueprints.Act = Backbone.Model.extend({
+	initialize: function() {
+		var self = this;
+		console.log('A new act has been born.');
+		var scenes = this.get('scenes');
+		_.each(scenes, function(scene) {
+			var actNumber = self.get('act');
+			var sceneNumber = scene.scene;
+			var lineNumber = 1;
+			scene.act = actNumber;
+			_.each(scene.lines, function(line) {
+				line.act = actNumber;
+				line.scene = sceneNumber;
+				line.lineNumber = lineNumber;
+				lineNumber++;
+			});
+		});
+		return this;
+	}
+});
+
+hamlet.blueprints.Acts = Backbone.Collection.extend({
+	model: hamlet.blueprints.Act,
+	initialize: function() {
+		console.log('A new collection of acts has been born.');
+	}
+});
+
+/*
  *	Hamlet Play Navigation Classes
  *
  */
@@ -152,7 +184,9 @@ hamlet.blueprints.LineModel = Backbone.Model.extend({
 });
 
 hamlet.blueprints.Scene = Backbone.Collection.extend({
-	model: hamlet.blueprints.LineModel
+	model: hamlet.blueprints.LineModel,
+	initialize: function() {
+	}
 });
 
 hamlet.blueprints.SceneView = Backbone.View.extend({
@@ -182,6 +216,9 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 		self.render();
 	},
 	render: function() {
+		var lines = this.model.get('line');
+		lines = lines.split('<br>');
+		this.model.set('lines', lines);
 		this.$el.html(this.template(this.model.attributes));
 		return this;
 	}
@@ -239,14 +276,9 @@ hamlet.blueprints.Modal = Backbone.Model.extend({
 });
 
 hamlet.active.requestNewConfirmationEmail = function(obj) {
-
-	console.log(obj);
-
 	var formId = '#js-request-new-confirmation-email-form';
 
 	$(formId).find('input, textarea').prop('disabled', true);
-
-	console.log($(formId));
 
 	if (obj.user_email == '' || obj.user_password == '') {
 		appendFormMessage(formId, 'error', 'Please be sure to provide your email address and password.');
@@ -314,7 +346,6 @@ hamlet.blueprints.Users = Backbone.Collection.extend({
 });
 
 hamlet.active.createUser = function(obj) {
-
 	var formId = '#js-signup-form';
 
 	$(formId).find('input, textarea').prop('disabled', true);
@@ -382,8 +413,6 @@ hamlet.active.logIn = function(obj) {
 		dataType: 'json',
 		data: obj,
 		success: function(response) {
-			console.log('success');
-			console.log(response);
 
 			setToken(response.token);
 
@@ -403,7 +432,6 @@ hamlet.active.logIn = function(obj) {
 			return true;
 		},
 		error: function(response) {
-			console.log(response);
 			var statusCode = response.status;
 			appendFormMessage(formId, response.status, response.message);
 			return false;
@@ -411,7 +439,6 @@ hamlet.active.logIn = function(obj) {
 	}
 
 	$.ajax(logInObj);
-
 }
 
 /*
@@ -435,8 +462,8 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 			hamlet.active.sceneView.close();	
 		}
 
-		var lines = acts[act-1].scenes[scene-1].lines;
-		hamlet.active.scene = new hamlet.blueprints.Scene(lines);
+		hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c' + act).get('scenes')[scene-1].lines);
+		console.log(hamlet.active.scene);
 
 		hamlet.active.sceneView = new hamlet.blueprints.SceneView({
 			el: $('#act__container'),
@@ -449,7 +476,6 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 			url: window.location.protocol + '//' + window.location.host + '/api/users/confirm-email/' + uuid,
 			dataType: 'json',
 			success: function(response) {
-				console.log(response);
 				var modalObj = {
 					heading: response.status.toProperCase(),
 					body: response.message,
@@ -462,7 +488,6 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 				renderModal(modalObj);
 			},
 			error: function(error) {
-				console.log(error);
 				var modalObj = {
 					heading: error.responseJSON.status.toProperCase(),
 					body: error.responseJSON.message,
@@ -480,7 +505,6 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 		}
 
 		$.ajax(uuidRequest);
-
 	}
 });
 
@@ -516,19 +540,21 @@ if (Backbone.history) {
       Backbone.history.navigate(href, true);
     }
   });
-
 }
 
 $(document).on('ready', function() {
 
+	//Init play
+	hamlet.active.acts = new hamlet.blueprints.Acts(acts);
+
+	//Init router
 	new hamlet.active.ActRouter;
 	Backbone.history.start({ pushState: true });
 
-	//Get first scene of play
-	var lines = acts[0].scenes[0].lines;
-
 	//Init first scene class and view using first scene as entry point
-	hamlet.active.scene = new hamlet.blueprints.Scene(lines);
+	hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c1').get('scenes')[0].lines);
+	console.log(hamlet.active.scene);
+
 	hamlet.active.sceneView = new hamlet.blueprints.SceneView({
 		el: $('#act__container'),
 		collection: hamlet.active.scene
@@ -542,42 +568,30 @@ $(document).on('ready', function() {
 	}).render();
 
 	//Init user model
-	hamlet.active.users = new hamlet.blueprints.Users({
-
-	});
+	hamlet.active.users = new hamlet.blueprints.Users({});
 
 	$('#js-login-form').on('submit', function(e) {
-
 		e.preventDefault();
 
 		var obj = collectInputs('#js-login-form');
 
 		hamlet.active.logIn(obj);
-
 	});
 
 	$('#js-signup-form').on('submit', function(e) {
-
 		e.preventDefault();
 
 		var obj = collectInputs('#js-signup-form');
 
 		hamlet.active.createUser(obj);
-
 	});
 
 	$('body').on('submit', '#js-request-new-confirmation-email-form', function(e) {
-
-		console.log('triggered');
-
 		e.preventDefault();
 
 		var obj = collectInputs('#js-request-new-confirmation-email-form');
 
-		console.log(obj);
-
 		hamlet.active.requestNewConfirmationEmail(obj);
-
 	});
 
 });

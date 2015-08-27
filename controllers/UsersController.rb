@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
 	before do
-		if headers[:'x-access-token'] != nil
-			@token = headers[:'x-access-token']
+		if headers['x-access-token'] != nil
+			@token = headers['x-access-token']
+			puts '-------------------------------------------Token is in the headers.'
 			puts @token
-		elsif params[:token]
+		elsif params['token']
 			@token = params['token']
 			puts @token
 		end
@@ -58,6 +59,7 @@ class UsersController < ApplicationController
 
 	get '/' do
 		#replace this eventually with a json object of all users
+		validate_token
 		@users = User.all.select('id, user_name, user_email, created, modified').to_json
 	end
 
@@ -132,8 +134,6 @@ class UsersController < ApplicationController
 		request.body.rewind
 		@request_body = params
 
-
-
 		if (self.does_user_exist?(@request_body[:user_email].downcase) != true)
 			#return early if user does not exist
 			content_type :json				
@@ -160,29 +160,26 @@ class UsersController < ApplicationController
 						:token => create_token(user)
 					}
 					return_message.to_json
-					
-					#session[:user] = user.id
-					
 				else
 					#confirmation error
-					session[:user] = nil
-					@user = nil
-					flash.message = {
-						:message => "Your email has not been verified. Please check your email for the confirmation link or request a new confirmation email below.",
-						:message_class => "alert-warning"
+					content_type :json				
+					status 401
+					return_message = {
+						:status => 'error',
+						:message => "Your email has not been verified. Please check your email for the confirmation link or request a new confirmation email below."
 					}
-
-					@request_new_email_confirmation_link = "<p><a href='/users/request-new-confirmation-email'>Request a new confirmation email.</a></p>"
-
-					erb :'users/login', :locals => {'body_class' => 'users users--login'}
+					return_message.to_json
 				end
 
 			else
 				#bad password error
-				session[:user] = nil
-				@user = nil
-				flash.message = {:message => "Your username or password were incorrect. Please try again.", :message_class => "alert-warning"}
-				erb :'users/login', :locals => {'body_class' => 'users users--login'}
+				content_type :json				
+				status 401
+				return_message = {
+					:status => 'error',
+					:message => "Your username or password were incorrect. Please try again."
+				}
+				return_message.to_json
 			end
 		end
 	end
@@ -333,6 +330,30 @@ class UsersController < ApplicationController
 			}
 			return_message.to_json
 		end
+	end
+
+	private
+
+	def validate_token
+		begin
+			JWT.decode(@token, JWT_SECRET)
+    rescue JWT::DecodeError
+      return_message = {
+				:status => 'error',
+				:message => "You must be logged in to perform this action. Please sign up or log in and try again."
+			}
+			halt 401, {
+				'Content-Type' => 'application/json'
+			}, return_message.to_json
+    rescue JWT::ExpiredSignature
+      content_type :json
+			status 401
+			return_message = {
+				:status => 'error',
+				:message => "Yousession has expired. Please log in and try again."
+			}
+			return_message.to_json
+    end
 	end
 
 end

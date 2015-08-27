@@ -1,7 +1,9 @@
 var acts = [
   {
+    "act": 1,
     "scenes": [
       {
+        "scene": 1,
         "name": "Scene I",
         "setting": "Elsinore. A platform before the castle. Night.",
         "lines": [{
@@ -190,6 +192,7 @@ var acts = [
           }]
       },
       {
+        "scene": 2,
         "name": "Scene II",
         "setting": "A room of state in the palace.",
         "lines": [{ 
@@ -433,6 +436,7 @@ var acts = [
         ]
       },
       {
+        "scene": 3,
         "name": "Scene III",
         "setting": "A room in Polonius's house.",
         "lines": [{
@@ -513,6 +517,7 @@ var acts = [
           }]
       },
       {
+        "scene": 4,
         "name": "Scene IV",
         "setting": "The platform. Night.",
         "lines": [{
@@ -596,6 +601,7 @@ var acts = [
           }]
       },
       {
+        "scene": 5,
         "name": "Scene V",
         "setting": "A more remote part of the platform. Night.",
         "lines": [{
@@ -777,8 +783,10 @@ var acts = [
     ]
   },
   {
+    "act": 2,
     "scenes": [
       {
+        "scene": 1,
         "name": "Scene I",
         "setting": "A room in Polonius's house.",
         "lines": [{
@@ -820,6 +828,7 @@ var acts = [
           }]
       },
       {
+        "scene": 2,
         "name": "Scene II",
         "setting": "A room in the same.",
         "lines": [{
@@ -1208,8 +1217,10 @@ var acts = [
     ]
   },
   {
+    "act": 3,
     "scenes": [
       {
+        "scene": 1,
         "name": "Scene I",
         "setting": "A room in the castle.",
         "lines": [{
@@ -1638,6 +1649,7 @@ var acts = [
           }]
       },
       {
+        "scene": 2,
         "name": "Scene II",
         "setting": "A room in the same.",
         "lines": [{
@@ -1664,6 +1676,7 @@ var acts = [
           }]
       },
       {
+        "scene": 3,
         "name": "Scene III",
         "setting": "The Queen's chamber.",
         "lines": [{
@@ -1827,8 +1840,10 @@ var acts = [
     ]
   },
   {
+    "act": 4,
     "scenes": [
       {
+        "scene": 1,
         "name": "Scene I",
         "setting": "A room in the castle.",
         "lines": [{
@@ -2151,8 +2166,10 @@ var acts = [
     ]
   },
   {
+    "act": 5,
     "scenes": [
       {
+        "scene": 1,
         "name": "Scene I",
         "setting": "A church yard.",
         "lines": [{
@@ -2458,6 +2475,7 @@ var acts = [
           }]
       },
       {
+        "scene": 2,
         "name": "Scene II",
         "setting": "A hall in the castle.",
         "lines": [{
@@ -2592,6 +2610,7 @@ var acts = [
           }]
       },
       {
+        "scene": 3,
         "name": "Scene III",
         "setting": "A room in the castle.",
         "lines": [{

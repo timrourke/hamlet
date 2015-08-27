@@ -1,9 +1,10 @@
 class HomeController < ApplicationController
 	before do
-		if headers[:'x-access-token'] != nil
-			@token = headers[:'x-access-token']
+		if headers['x-access-token'] != nil
+			@token = headers['x-access-token']
+			puts '-------------------------------------------Token is in the headers.'
 			puts @token
-		elsif params[:token]
+		elsif params['token']
 			@token = params['token']
 			puts @token
 		end
