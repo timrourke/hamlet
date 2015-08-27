@@ -1,4 +1,13 @@
 class UsersController < ApplicationController
+	before do
+		if headers[:'x-access-token'] != nil
+			@token = headers[:'x-access-token']
+			puts @token
+		elsif params[:token]
+			@token = params['token']
+			puts @token
+		end
+	end
 
 	def does_user_exist?(email)
 		@user = User.find_by(:user_email => email.downcase.to_s )
@@ -40,19 +49,16 @@ class UsersController < ApplicationController
 		})
 	end
 
-	get '/errortest' do
-		content_type :json
-		status 500
-		return_message = {
-			:status => 'error',
-			:message => "Sorry, there was a problem creating you as a user. Please try again."					
-		}
-		return_message.to_json
+	def create_token(user)
+		exp = Time.now.to_i + 4 * 3600
+		exp_payload = { :user_id => user.id, :exp => exp }
+		token = JWT.encode exp_payload, JWT_SECRET, 'HS256'
+		token
 	end
 
 	get '/' do
 		#replace this eventually with a json object of all users
-		@users = User.all.to_json
+		@users = User.all.select('id, user_name, user_email, created, modified').to_json
 	end
 
 	post '/' do
@@ -124,8 +130,61 @@ class UsersController < ApplicationController
 
 	post '/login' do
 		request.body.rewind
-		@request_body = JSON.parse(request.body.read.to_s)
+		@request_body = params
 
+
+
+		if (self.does_user_exist?(@request_body[:user_email].downcase) != true)
+			#return early if user does not exist
+			content_type :json				
+			status 401
+			return_message = {
+				:status => 'error',
+				:message => "Your username or password were incorrect. Please try again."
+			}
+			return_message.to_json
+		else
+			#no user errors detected
+			user = User.where(:user_email => @request_body[:user_email].downcase).first!
+
+			if user.password_hash == BCrypt::Engine.hash_secret(@request_body[:user_password], user.password_salt)
+				if (user.email_confirmed == true)
+					#success, build JWT
+
+					content_type :json				
+					status 200
+					return_message = {
+						:status => 'success',
+						:message => "Welcome back, #{user.user_name}! Thanks for logging in!",
+						:user => user,
+						:token => create_token(user)
+					}
+					return_message.to_json
+					
+					#session[:user] = user.id
+					
+				else
+					#confirmation error
+					session[:user] = nil
+					@user = nil
+					flash.message = {
+						:message => "Your email has not been verified. Please check your email for the confirmation link or request a new confirmation email below.",
+						:message_class => "alert-warning"
+					}
+
+					@request_new_email_confirmation_link = "<p><a href='/users/request-new-confirmation-email'>Request a new confirmation email.</a></p>"
+
+					erb :'users/login', :locals => {'body_class' => 'users users--login'}
+				end
+
+			else
+				#bad password error
+				session[:user] = nil
+				@user = nil
+				flash.message = {:message => "Your username or password were incorrect. Please try again.", :message_class => "alert-warning"}
+				erb :'users/login', :locals => {'body_class' => 'users users--login'}
+			end
+		end
 	end
 
 	get '/logout' do

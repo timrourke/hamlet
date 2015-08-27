@@ -1,3 +1,33 @@
+// Method to override Backbone's .sync() method with additional headers containing our token
+// Store "old" sync function
+var backboneSync = Backbone.sync
+
+// Now override
+Backbone.sync = function (method, model, options) {
+
+  /*
+   * "options" represents the options passed to the underlying $.ajax call         
+   */
+  var token = window.localStorage.getItem('token');
+
+  if (token) {
+    options.headers = {
+      'x-access-token': token
+    }
+  }
+
+  // call the original function
+  backboneSync(method, model, options);
+};
+
+function setToken(token) {
+	return window.localStorage.setItem('token', token);
+}
+
+function getToken() {
+	return window.localStorage.getItem('token');
+}
+
 //Add toProperCase() method to String prototype for easy case manipulation
 //Credit: http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
 String.prototype.toProperCase = function () {
@@ -320,6 +350,71 @@ hamlet.active.createUser = function(obj) {
 };
 
 /*
+ *	User Session Classes
+ *
+ */
+
+hamlet.blueprints.CurrentUser = Backbone.Model.extend({
+	initialize: function() {
+		console.log('A CurrentUser has been born.');
+	}
+});
+
+hamlet.active.logIn = function(obj) {
+	var formId = '#js-login-form';
+
+	$(formId).find('input, textarea').prop('disabled', true);
+
+	if (obj.user_email == '' || obj.user_password == '') {
+		appendFormMessage(formId, 'error', 'Please be sure to include your username and password.');
+		return false;
+	} 
+
+	var token = getToken();
+
+	if (token) {
+		obj.token = token;
+	}
+
+	logInObj = {
+		url: window.location.protocol + '//' + window.location.host + '/api/users/login',
+		method: 'post',
+		dataType: 'json',
+		data: obj,
+		success: function(response) {
+			console.log('success');
+			console.log(response);
+
+			setToken(response.token);
+
+			hamlet.active.currentUser = new hamlet.blueprints.CurrentUser(response);
+
+			var modalObj = {
+				heading: response.status.toProperCase(),
+				body: response.message,
+				controls: [{
+					class: 'modal__dismiss',
+					value: 'OK'
+				}]
+			}
+
+			renderModal(modalObj);
+
+			return true;
+		},
+		error: function(response) {
+			console.log(response);
+			var statusCode = response.status;
+			appendFormMessage(formId, response.status, response.message);
+			return false;
+		}
+	}
+
+	$.ajax(logInObj);
+
+}
+
+/*
  *	Router Definitions
  *
  */
@@ -448,6 +543,16 @@ $(document).on('ready', function() {
 
 	//Init user model
 	hamlet.active.users = new hamlet.blueprints.Users({
+
+	});
+
+	$('#js-login-form').on('submit', function(e) {
+
+		e.preventDefault();
+
+		var obj = collectInputs('#js-login-form');
+
+		hamlet.active.logIn(obj);
 
 	});
 
