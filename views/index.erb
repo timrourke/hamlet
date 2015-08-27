@@ -27,7 +27,7 @@
 		<div class="utility-nav">
 			<form action="/api/users/login" method="post" id="js-login-form">
 				<div class="form__feedback"></div>
-				<input type="email" name="user_email">
+				<input type="email" name="user_email" placeholder="Your email">
 				<input type="password" name="user_password">
 				<input type="submit" value="Log In">
 			</form>
@@ -63,7 +63,12 @@
 		</ul>
 	</div>
 
-	<script type="text/javascript" src="/assets/js/app.js"></script>
+	<h1>Test comment posting route</h1>
+	<form action="/api/comments" method="post" id="js-comment-form">
+		<div class="form__feedback"></div>
+		<textarea name="comment"></textarea>
+		<input type="submit" value="Submit">
+	</form>
 
 	<script type="text/template" id="lineTemplate">
 		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" class="line__single-line"><%%= lines[i] %></span><br><%% } %></span></p>
@@ -111,5 +116,13 @@
 		</form>
 	</script>
 	<div class="overlay"></div>
+
+	<script type="text/javascript" src="/assets/js/play-content/play-content.js"></script>
+	<script type="text/javascript" src="/assets/js/modals/modals.js"></script>
+	<script type="text/javascript" src="/assets/js/navigation/navigation.js"></script>
+	<script type="text/javascript" src="/assets/js/router/router.js"></script>
+	<script type="text/javascript" src="/assets/js/users/users.js"></script>
+	<script type="text/javascript" src="/assets/js/comments/comments.js"></script>
+	<script type="text/javascript" src="/assets/js/app.js"></script>
 </body>
 </html>
