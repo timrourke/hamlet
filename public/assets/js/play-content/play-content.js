@@ -48,7 +48,22 @@ hamlet.blueprints.LineModel = Backbone.Model.extend({
 
 hamlet.blueprints.Scene = Backbone.Collection.extend({
 	model: hamlet.blueprints.LineModel,
-	initialize: function() {
+	initialize: function(model, options) {
+		var self = this;
+		console.log('A new Scene collection has been born.');
+		this.act = options.act;
+		this.scene = options.scene;
+		//Init Comments
+		if (hamlet.active.commentsView) {
+			hamlet.active.commentsView.close()
+		}
+		hamlet.active.comments = new hamlet.blueprints.Comments({},{
+			act: self.act,
+			scene: self.scene
+		});
+		hamlet.active.commentsView = new hamlet.blueprints.CommentsView({
+			collection: hamlet.active.comments
+		});
 	}
 });
 
@@ -64,12 +79,16 @@ hamlet.blueprints.SceneView = Backbone.View.extend({
 			}, this);
 			self.$el.append(lineView.el);
 		});
+		self.$el.velocity('transition.slideLeftIn');
 		return this;
-	},
+	}
 });
 
 hamlet.blueprints.LineView = Backbone.View.extend({
 	tagName: 'li',
+	events: {
+		'click .line__single-line': 'showCommentsForm'
+	},
 	initialize: function() {
 		var self = this;
 		this.template = _.template($('#lineTemplate').html());
@@ -84,5 +103,23 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 		this.model.set('lines', lines);
 		this.$el.html(this.template(this.model.attributes));
 		return this;
+	},
+	showCommentsForm: function(evt) {
+		//return early unless 'dismiss' button is clicked.
+		//prevents undesired closing of comment form modal.
+		if (evt.target.className != 'line__single-line') {
+			return false;
+		}
+		if (hamlet.active.commentFormView) {
+			hamlet.active.commentFormView.close();
+		}
+		var self = this;
+		var subline_number = $(evt.target).data('subline_number');
+		this.model.attributes.subline_number = subline_number;
+		hamlet.active.commentForm = new hamlet.blueprints.CommentForm(this.model.attributes);
+		hamlet.active.commentFormView = new hamlet.blueprints.CommentFormView({
+			el: $(this.el).find(evt.target).find('.line__comment'),
+			model: hamlet.active.commentForm
+		});
 	}
 });

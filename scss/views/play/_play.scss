@@ -1,3 +1,7 @@
+.play {
+	@extend .clearfix;
+}
+
 .line.stage_instructions .character {
 	display:none;
 }

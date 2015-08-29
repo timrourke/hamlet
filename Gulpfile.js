@@ -57,8 +57,8 @@ gulp.task('js', ['bower'], function() {
   return gulp.src(['./js/vendor/vendor.js', './js/global.js'])
     .pipe(concat('./js-build/global.build.js'))
     .pipe(jshint())
-    //.pipe(rename('global.min.js'))
-    //.pipe(uglify())
+    .pipe(rename('global.min.js'))
+    .pipe(uglify())
     .pipe(gulp.dest('./public/assets/js/'))
     .pipe(browserSync.stream());
 });
@@ -196,14 +196,15 @@ gulp.task('svgstore', function() {
 });
 
 // watch tasks and serve via browserSync
-gulp.task('serve', ['sass', 'sass-ie',/* 'images',*/ 'svgstore'], function() {
+gulp.task('serve', ['sass', 'sass-ie', 'js',/* 'images',*/ 'svgstore'], function() {
   browserSync.init({
     proxy: 'localhost:9292'
   });
 
   //gulp.watch('images-source/**/*.{jpg,jpeg,png,tiff,webp,gif}', ['images']);
-  gulp.watch('./js/**/*.js', ['js'])
-  gulp.watch('./svg-source/**/*.svg', ['svgstore'])
+  gulp.watch('./bower_components/**/*.js', ['js']);
+  gulp.watch('./js/**/*.js', ['js']);
+  gulp.watch('./svg-source/**/*.svg', ['svgstore']);
   gulp.watch('./scss/**', ['sass', 'sass-ie']);
   gulp.watch("./views/**/*.erb").on("change", browserSync.reload);
 });

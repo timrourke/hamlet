@@ -90,27 +90,24 @@ function collectInputs(formId) {
 }
 
 function appendFormMessage(formId, status, message) {
-	var statusClass;
+	var $form = $(formId);
 
 	switch (status) {
 		case 'error':
-			statusClass = 'form--error';
+			$form.removeClass('form--success').addClass('form--error');
+			$form.velocity('callout.shake');
+			$form.find('input, textarea').prop('disabled', false);
 			break;
 		case 'success':
-			statusClass = 'form--success';
+			$form.addClass('form--success').removeClass('form--error');
+			$form.velocity('transition.slideUpOut');
 			break;
 		default:
-			statusClass = 'form--success';
+			
 			break;
 	}
 
-	var $form = $(formId);
-
-	$form.addClass(statusClass);
-
 	$form.children('.form__feedback').html(status.toProperCase() + '! ' + message);
-
-	$form.find('input, textarea').prop('disabled', false);
 
 	return true;
 }
@@ -189,14 +186,6 @@ $(document).on('ready', function() {
 	//Init router
 	new hamlet.active.ActRouter;
 	Backbone.history.start({ pushState: true });
-
-	//Init first scene class and view using first scene as entry point
-	hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c1').get('scenes')[0].lines);
-
-	hamlet.active.sceneView = new hamlet.blueprints.SceneView({
-		el: $('#act__container'),
-		collection: hamlet.active.scene
-	}).render();
 	
 	//Init scene navigation and view
 	hamlet.active.actNavigationMenu = new hamlet.blueprints.ActsNavigationMenu(acts);
@@ -207,6 +196,11 @@ $(document).on('ready', function() {
 
 	//Init user model
 	hamlet.active.users = new hamlet.blueprints.Users({});
+
+	/*
+	 *	Register form submit handlers
+	 *
+	 */
 
 	$('#js-login-form').on('submit', function(e) {
 		e.preventDefault();
@@ -224,7 +218,7 @@ $(document).on('ready', function() {
 		hamlet.active.createUser(obj);
 	});
 
-	$('#js-comment-form').on('submit', function(e) {
+	$('body').on('submit', '#js-comment-form', function(e) {
 		e.preventDefault();
 
 		var obj = collectInputs('#js-comment-form');

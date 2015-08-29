@@ -27,7 +27,8 @@
 	max-width:20em;
 }
 
-.modal .modal__dismiss--top {
+.modal .modal__dismiss--top,
+.commentForm__dismiss--top {
 	position:absolute;
 	font-size:1.5em;
 	top:0em;
@@ -45,4 +46,8 @@
 
 .modal .modal__controls {
 	width:100%;
+}
+
+.commentForm {
+	position:relative;
 }

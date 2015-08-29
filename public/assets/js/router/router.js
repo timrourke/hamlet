@@ -15,20 +15,70 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 	},
 
 	index: function() {
-		
+		if (hamlet.active.commentsView) {
+			hamlet.active.commentsView.close()
+		}
+		if (hamlet.active.sceneView) {
+			hamlet.active.sceneView.$el.velocity('transition.slideLeftOut', {
+				display: 'block',
+				complete: function() {
+					hamlet.active.sceneView.close();	
+
+					hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c1').get('scenes')[0].lines, {
+						act: 1,
+						scene: 1
+					});
+
+					hamlet.active.sceneView = new hamlet.blueprints.SceneView({
+						el: $('#act__container'),
+						collection: hamlet.active.scene
+					}).render();	
+				}
+			});
+		} else {
+			hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c1').get('scenes')[0].lines, {
+				act: 1,
+				scene: 1
+			});
+			hamlet.active.sceneView = new hamlet.blueprints.SceneView({
+				el: $('#act__container'),
+				collection: hamlet.active.scene
+			}).render();
+		}
 	},
 
 	act: function(act, scene) {
+		if (hamlet.active.commentsView) {
+			hamlet.active.commentsView.close()
+		}
 		if (hamlet.active.sceneView) {
-			hamlet.active.sceneView.close();	
+			hamlet.active.sceneView.$el.velocity('transition.slideLeftOut', {
+				display: 'block',
+				complete: function() {
+					hamlet.active.sceneView.close();	
+
+					hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c' + act).get('scenes')[scene-1].lines, {
+						act: parseInt(act),
+						scene: parseInt(scene)
+					});
+
+					hamlet.active.sceneView = new hamlet.blueprints.SceneView({
+						el: $('#act__container'),
+						collection: hamlet.active.scene
+					}).render();	
+				}
+			});
+		} else {
+			hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c' + act).get('scenes')[scene-1].lines, {
+				act: parseInt(act),
+				scene: parseInt(scene)
+			});
+			hamlet.active.sceneView = new hamlet.blueprints.SceneView({
+				el: $('#act__container'),
+				collection: hamlet.active.scene
+			}).render();
 		}
 
-		hamlet.active.scene = new hamlet.blueprints.Scene(hamlet.active.acts.get('c' + act).get('scenes')[scene-1].lines);
-
-		hamlet.active.sceneView = new hamlet.blueprints.SceneView({
-			el: $('#act__container'),
-			collection: hamlet.active.scene
-		}).render();
 	},
 
 	confirmUser: function(uuid) {

@@ -4,9 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Hamlet</title>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.2/backbone.js"></script>
+	<!-- script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script -->
+	<!-- script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script -->
+	<!-- script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.2/backbone.js"></script -->
+	<script type="text/javascript" src="/assets/js/global.min.js"></script>
 	<script type="text/javascript" src="/assets/js/play.min.js"></script>
 
 	<script>
@@ -63,15 +64,50 @@
 		</ul>
 	</div>
 
-	<h1>Test comment posting route</h1>
-	<form action="/api/comments" method="post" id="js-comment-form">
-		<div class="form__feedback"></div>
-		<textarea name="comment"></textarea>
-		<input type="submit" value="Submit">
-	</form>
+	<div class="comments__wrapper"></div>
 
+	<script type="text/template" id="commentTemplate">
+		<%% var date_created = new Date( created ); %>
+		<div class="comments">
+			<ul class="comment__list">
+				<li class="comment">
+					<article class="comment__wrapper">
+						<header class="comment__header">
+							<h6 class="comment__author"><%%= user_name %></h6>
+							<span class="comment__date-created"><%%= (date_created.getMonth() + 1) + '.' + date_created.getDate() + '.' +  date_created.getFullYear() %></span>
+						</header>
+						<div class="comment__body">
+							<%%= comment %>
+						</div>
+						<footer class="comment__footer">
+							<%% if (!upvotes) { upvotes = [] }; if (!downvotes) { downvotes = [] }; %>
+							<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">-</a> <a href="#upvote" class="comment__button comment__upvote">+</a> <a href="#reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a>
+						</footer>
+					</article>
+				</li>
+			</ul>
+		</div>
+	</script>
+
+	<script type="text/template" id="commentFormTemplate">
+		<div class="commentForm__wrapper">	
+			<form class="commentForm" action="/api/comments" method="post" id="js-comment-form">
+				<button class="commentForm__dismiss commentForm__dismiss--top" type="button">×</button>
+				<h4>Add a comment</h4>
+				<div class="form__feedback"></div>
+				<textarea name="comment"></textarea>
+				<input type="hidden" name="act" value="<%%= act %>">
+				<input type="hidden" name="scene" value="<%%= scene %>">
+				<input type="hidden" name="line_number" value="<%%= lineNumber %>">
+				<input type="hidden" name="subline_number" value="<%%= subline_number %>">
+				<input class="commentForm__submit" type="submit" value="Submit">
+			</form>
+		</div>
+	</script>
+	
 	<script type="text/template" id="lineTemplate">
-		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" class="line__single-line"><%%= lines[i] %></span><br><%% } %></span></p>
+		<%% subline_number = 1; %>
+		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span id="line-<%%= act %>-<%%= scene %>-<%%= lineNumber %>" data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" data-subline_number="<%%= subline_number %>" class="line__single-line"><%%= lines[i] %><span class="line__comment"></span><br></span><%% subline_number++; %><%% } %></span></p>
 	</script>
 
 	<script type="text/template" id="actNavigationItemViewTemplate">

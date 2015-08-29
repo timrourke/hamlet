@@ -1,0 +1,51 @@
+.comments {
+	padding:1em 1em 0 1em;
+	background-color:#f5f5f5;
+}
+
+.comments .comment__list {
+	margin:0;
+	padding:0;
+	list-style-type:none;
+}
+
+.comments .comment {
+	font-size:0.8em;
+	padding-bottom:1.25em;
+}
+
+.comments .comment__header,
+.comments .comment__footer {
+	@extend .clearfix;
+}
+
+.comments .comment__author {
+	display:block;
+	float:left;
+	margin-right:0.5em;
+}
+
+.comments .comment__date-created {
+	@extend %typl8-ot--smcp;
+}
+
+.comments .comment__footer > * {
+	float:left;
+	margin-right:0.5em;
+	padding-top:.125em;
+	line-height:1.5em;
+}
+
+.comments .comment__votes {
+	background-color:lighten($blue, 40%);
+	border-radius:0.75em;
+	min-width:1.625em;
+	padding-left:0.25em;
+	padding-right:0.275em;
+	text-align:center;
+	color:white;
+}
+
+.comments .comment__downvote {
+	font-family:sans-serif;
+}

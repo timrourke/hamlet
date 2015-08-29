@@ -1,6 +1,24 @@
 class CommentsController < ApplicationController
 	get '/' do
-		@comments = Comment.all
+		@comments = Comment.joins('INNER JOIN users ON users.id = comments.user_id').select('users.user_name, comments.id, comments.created, comments.modified, comments.act, comments.scene, comments.line, comments.subline, comments.comment, comments.upvotes, comments.downvotes').order('comments.act ASC, comments.scene ASC, comments.line ASC, comments.subline ASC, comments.created DESC').all
+
+		@comments.to_json
+	end
+
+	get '/act/:act' do
+		@comments = Comment.joins('INNER JOIN users ON users.id = comments.user_id').where(comments: { act: params[:act] }).select('users.user_name, comments.id, comments.created, comments.modified, comments.act, comments.scene, comments.line, comments.subline, comments.comment, comments.upvotes, comments.downvotes').order('comments.act ASC, comments.scene ASC, comments.line ASC, comments.subline ASC, comments.created DESC').all
+
+		@comments.to_json
+	end
+
+	get '/act/:act/scene/:scene' do
+		@comments = Comment.joins('INNER JOIN users ON users.id = comments.user_id').where(comments: { act: params[:act], scene: params[:scene] }).select('users.user_name, comments.id, comments.created, comments.modified, comments.act, comments.scene, comments.line, comments.subline, comments.comment, comments.upvotes, comments.downvotes').order('comments.act ASC, comments.scene ASC, comments.line ASC, comments.subline ASC, comments.created DESC').all
+
+		@comments.to_json
+	end
+
+	get '/act/:act/scene/:scene/line/:line' do
+		@comments = Comment.joins('INNER JOIN users ON users.id = comments.user_id').where(comments: { act: params[:act], scene: params[:scene], line: params[:line] }).select('users.user_name, comments.id, comments.created, comments.modified, comments.act, comments.scene, comments.line, comments.subline, comments.comment, comments.upvotes, comments.downvotes').order('comments.act ASC, comments.scene ASC, comments.line ASC, comments.subline ASC, comments.created DESC').all
 
 		@comments.to_json
 	end
@@ -12,7 +30,7 @@ class CommentsController < ApplicationController
 		@request_body = JSON.parse(request.body.read.to_s)
 
 		if (!@user = User.select('id, user_name, user_email, created, modified').find(@decoded_token[0]['user_id']))
-			#return early if password doesn't match confirmation password
+			#return early if no user found
 			return_message = {
 				:status => 'error',
 				:message => "Invalid user. Please sign up or log in and try again."
@@ -28,20 +46,33 @@ class CommentsController < ApplicationController
 			@comment.user_id = @user.id
 			@comment.created = Time.now
 			@comment.comment = @request_body['comment']
-			@comment.act = 1
-			@comment.scene = 1
-			@comment.line = 1
+			@comment.act = @request_body['act']
+			@comment.scene = @request_body['scene']
+			@comment.line = @request_body['line_number']
+			@comment.subline = @request_body['subline_number']
 
 			if @comment.save
 
 				content_type :json				
 				status 201
+
+				@comment.status = 'success'
+				@comment.message = "Thanks for your comment, #{@user.user_name}!"
+				@comment.user = @user.to_json
+
 				return_message = {
-					:status => 'success',
-					:message => "Thanks for your comment, #{@user.user_name}!",
-					:user => @user.to_json,
-					:comment => @comment
+					:user_id => @comment.user_id,
+					:created => @comment.created,
+					:comment => @comment.comment,
+					:act => @comment.act,
+					:scene => @comment.scene,
+					:line => @comment.line,
+					:subline => @comment.subline,
+					:status	=> @comment.status,
+					:message => @comment.message,
+					:user => @comment.user
 				}
+				
 				return_message.to_json
 
 			else
@@ -55,6 +86,57 @@ class CommentsController < ApplicationController
 				}, return_message.to_json
 			end
 
+		end
+	end
+
+	put '/' do
+		validate_token
+
+		request.body.rewind
+		@request_body = JSON.parse(request.body.read.to_s)
+
+		if (!@user = User.select('id, user_name, user_email, created, modified').find(@decoded_token[0]['user_id']))
+			#return early if no user found
+			return_message = {
+				:status => 'error',
+				:message => "Invalid user. Please sign up or log in and try again."
+			}
+			halt 401, {
+				'Content-Type' => 'application/json'
+			}, return_message.to_json
+
+		else
+
+			@comment = Comment.find(@request_body['id'])
+
+
+			@upvotes = @comment.upvotes.to_a
+			@upvotes.push(@user.id)
+
+			@comment.upvotes = @upvotes
+
+			@comment.save
+
+			content_type :json				
+			status 200
+
+			# return_message = {
+			# 	:id => @comment.id,
+			# 	:user_id => @comment.user_id,
+			# 	:created => @comment.created,
+			# 	:modified => @comment.modified,
+			# 	:act => @comment.act,
+			# 	:scene => @comment.scene,
+			# 	:line => @comment.line,
+			# 	:subline => @comment.subline,
+			# 	:comment => @comment.comment,
+			# 	:upvotes => @comment.upvotes.to_a.length,
+			# 	:downvotes => @comment.downvotes.to_a.length
+			# }
+
+			# return_message.to_json
+
+			@comment.to_json
 		end
 	end
 end

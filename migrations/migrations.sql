@@ -24,5 +24,8 @@ CREATE TABLE comments (
 	act integer,
 	scene integer,
 	line integer,
-	comment text
+	subline integer,
+	comment text,
+	upvotes integer[],
+	downvotes integer[]
 );

@@ -30,6 +30,14 @@ class ApplicationController < Sinatra::Base
 	def validate_token
 		begin
 			@decoded_token = JWT.decode(@token, JWT_SECRET)
+		rescue JWT::ExpiredSignature
+			return_message = {
+				:status => 'error',
+				:message => "Your session has expired. Please log in and try again."
+			}
+			halt 401, {
+				'Content-Type' => 'application/json'
+			}, return_message.to_json
     rescue JWT::DecodeError
       return_message = {
 				:status => 'error',
@@ -38,14 +46,6 @@ class ApplicationController < Sinatra::Base
 			halt 401, {
 				'Content-Type' => 'application/json'
 			}, return_message.to_json
-    rescue JWT::ExpiredSignature
-      content_type :json
-			status 401
-			return_message = {
-				:status => 'error',
-				:message => "Yousession has expired. Please log in and try again."
-			}
-			return_message.to_json
     end
 	end
 

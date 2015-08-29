@@ -570,3 +570,15 @@ button {
 .controls-inline .control + .control {
   margin-left: u(1rem);
 }
+
+form {
+  transition:all 0.3s ease-out;
+}
+
+form.form--success {
+  outline: 2px solid $green;
+}
+
+form.form--error {
+  outline: 2px solid $red;
+}
