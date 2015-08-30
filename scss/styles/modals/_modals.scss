@@ -1,6 +1,8 @@
 .overlay {
+	position:absolute;
 	opacity:0;
 	transition:opacity 0.3s ease-out;
+	z-index:20000;
 }
 
 .overlay.open,
@@ -10,10 +12,10 @@
 	left:0;
 	height:100%;
 	width:100%;
+	margin-right:320px;
 	background-color:rgba(0,0,0,0.5);
 	opacity:1;
 	transition:opacity 0.3s ease-out;
-	z-index:1;
 }
 
 .modal {
@@ -42,7 +44,6 @@
 	border:0;
 	outline:none;
 	box-shadow:none;
-	//height:1em;
 	outline:0;
 }
 

@@ -2,7 +2,9 @@
 	@extend .clearfix;
 	width:100%;
 	margin:1em auto;
-	max-width:50em;
+	max-width:40em;
+	position:relative;
+	z-index:0;
 }
 
 .line.stage_instructions .character {
@@ -27,7 +29,7 @@
 .character {
 	@include span(2 of 12);
 	font-variant: small-caps;
-	font-weight: 300;
+	color:$burnt;
 }
 
 .line__content {

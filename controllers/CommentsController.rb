@@ -70,7 +70,8 @@ class CommentsController < ApplicationController
 					:subline => @comment.subline,
 					:status	=> @comment.status,
 					:message => @comment.message,
-					:user => @comment.user
+					:user => @comment.user,
+					:user_name => @user.user_name
 				}
 				
 				return_message.to_json

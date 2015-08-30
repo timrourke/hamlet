@@ -10,6 +10,7 @@ hamlet.active = hamlet.active || {};
 $('body').on('click', '.js-pushMenu__toggle', function(e) {
   e.preventDefault();
   $('body').toggleClass('js-pushMenu--open');
+  $('.pushMenu .utility-nav, .pushMenu .form__signup').removeClass('open');
 });
 
 $('body').on('click', '.form__login-button', function(e) {
@@ -17,9 +18,14 @@ $('body').on('click', '.form__login-button', function(e) {
   $('.pushMenu .utility-nav').addClass('open');
 });
 
+$('body').on('click', '.form__signup-button', function(e) {
+  e.preventDefault();
+  $('.pushMenu .form__signup').addClass('open');
+});
+
 $('body').on('click', '.form__back-button', function(e) {
   e.preventDefault();
-  $('.pushMenu .utility-nav').removeClass('open');
+  $('.pushMenu .utility-nav, .pushMenu .form__signup').removeClass('open');
 });
 
 hamlet.blueprints.ActNavigationModel = Backbone.Model.extend({

@@ -94,6 +94,8 @@ hamlet.active.logIn = function(obj) {
 
 			hamlet.active.currentUser = new hamlet.blueprints.CurrentUser(response);
 
+			appendFormMessage(formId, response.status, response.message);
+
 			var modalObj = {
 				heading: response.status.toProperCase(),
 				body: response.message,
@@ -108,8 +110,7 @@ hamlet.active.logIn = function(obj) {
 			return true;
 		},
 		error: function(response) {
-			var statusCode = response.status;
-			appendFormMessage(formId, response.status, response.message);
+			appendFormMessage(formId, response.responseJSON.status, response.responseJSON.message);
 			return false;
 		}
 	}

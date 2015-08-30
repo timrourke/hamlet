@@ -1,6 +1,16 @@
 class UsersController < ApplicationController
-	def does_user_exist?(email)
+	def does_user_email_exist?(email)
 		@user = User.find_by(:user_email => email.downcase.to_s )
+
+		if @user
+			return true
+		else
+			return false
+		end
+	end
+
+	def does_user_name_exist?(user_name)
+		@user = User.find_by(:user_name => user_name.downcase.to_s )
 
 		if @user
 			return true
@@ -54,13 +64,23 @@ class UsersController < ApplicationController
 		request.body.rewind
 		@request_body = JSON.parse(request.body.read.to_s)
 
-		if self.does_user_exist?(@request_body['user_email'].downcase)
+		if self.does_user_email_exist?(@request_body['user_email'].downcase)
 			#return early if user already exists
 			content_type :json
 			status 400
 			return_message = {
 				:status => 'error',
 				:message => "Sorry, this email address is already registered. Please use a unique email address."					
+			}
+			return_message.to_json
+
+		elsif self.does_user_name_exist?(@request_body['user_name'].downcase)
+			#return early if user already exists
+			content_type :json
+			status 400
+			return_message = {
+				:status => 'error',
+				:message => "Sorry, this username is already registered. Please choose a different username."					
 			}
 			return_message.to_json
 
@@ -121,7 +141,7 @@ class UsersController < ApplicationController
 		request.body.rewind
 		@request_body = params
 
-		if (self.does_user_exist?(@request_body[:user_email].downcase) != true)
+		if (self.does_user_email_exist?(@request_body[:user_email].downcase) != true)
 			#return early if user does not exist
 			content_type :json				
 			status 401

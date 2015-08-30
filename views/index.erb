@@ -38,6 +38,7 @@
 				<h4 class="menu-title">Hamlet</h4>
 				<ul id="play__navigation" class="pushMenu__main"></ul>
 				<div class="utility-nav">
+					<h4 class="menu-title">Log in</h3>
 					<form action="/api/users/login" method="post" id="js-login-form">
 						<div class="form__feedback"></div>
 						<label for="login-form__user_email">
@@ -56,6 +57,38 @@
 					</form>
 					<a id="js-logout" href="/api/logout">Log out</a>
 				</div>
+				<div class="form__signup">
+					<h4 class="menu-title">Sign Up</h3>
+					<form action="api/users/signup" method="post" id="js-signup-form">
+						<div class="form__feedback"></div>
+
+						<label for="form-signup__user_name">
+							User name
+							<input type="text" name="user_name" id="form-signup__user_name" placeholder="Your username">	
+						</label>
+						
+						<label for="form-signup__user_email">
+							Your email
+							<input type="email" name="user_email" id="form-signup__user_email" placeholder="Your email">	
+						</label>
+						
+						<label for="form-signup__user_password">
+							Your password
+							<input type="password" name="user_password" id="form-signup__user_password">	
+						</label>
+						
+						<label for="form-signup__user_password_confirm">
+							Confirm your password
+							<input type="password" name="user_password_confirm" id="form-signup__user_password_confirm">	
+						</label>
+						
+						<input type="submit" value="Sign Up">
+
+						<button class="form__back-button" type="button">&loarr; Back</button>
+					</form>
+				</div>
+				<button class="form__signup-button" type="button">Sign Up</button>
+				<span class="sep"> or </span>
 				<button class="form__login-button" type="button">Log in &roarr;</button>
 			</nav>	
 
@@ -68,28 +101,12 @@
 					</div>
 				</div>
 
-				<div class="form__signup">
-					<h3>Sign Up</h3>
-					<form action="api/users/signup" method="post" id="js-signup-form">
-						<div class="form__feedback"></div>
-						<input type="text" name="user_name" id="user_name" placeholder="Your username">
-						<input type="email" name="user_email" id="user_email" placeholder="Your email">
-						<input type="password" name="user_password" id="user_password">
-						<input type="password" name="user_password_confirm" id="user_password_confirm">
-						<input type="submit" value="Sign Up">
-					</form>
-				</div>
-
 				<div class="play col-group">
-					<ul id="act__container">
-					
-					</ul>
+					<ul id="act__container"></ul>
 				</div>
 			</div>
-			
+			<div class="overlay"></div>
 		</div>
-
-		<div class="overlay"></div>
 	</div>
 
 	
@@ -98,9 +115,7 @@
 
 	<script type="text/template" id="commentTemplate">
 		<%% var date_created = new Date( created ); %>
-		<div class="comments">
-			<ul class="comment__list">
-				<li class="comment">
+		
 					<article class="comment__wrapper">
 						<header class="comment__header">
 							<h6 class="comment__author"><%%= user_name %></h6>
@@ -111,12 +126,10 @@
 						</div>
 						<footer class="comment__footer">
 							<%% if (!upvotes) { upvotes = [] }; if (!downvotes) { downvotes = [] }; %>
-							<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">-</a> <a href="#upvote" class="comment__button comment__upvote">+</a> <a href="#reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a>
+							<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">&darr;</a> <a href="#upvote" class="comment__button comment__upvote">&uarr;</a> <a href="#reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a>
 						</footer>
 					</article>
-				</li>
-			</ul>
-		</div>
+			
 	</script>
 
 	<script type="text/template" id="commentFormTemplate">
@@ -137,7 +150,7 @@
 	
 	<script type="text/template" id="lineTemplate">
 		<%% subline_number = 1; %>
-		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span id="line-<%%= act %>-<%%= scene %>-<%%= lineNumber %>" data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" data-subline_number="<%%= subline_number %>" class="line__single-line"><%%= lines[i] %><span class="line__comment"></span><br></span><%% subline_number++; %><%% } %></span></p>
+		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span id="line-<%%= act %>-<%%= scene %>-<%%= lineNumber %>-<%%= subline_number %>" data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" data-subline_number="<%%= subline_number %>" class="line__single-line"><%%= lines[i] %><span class="line__comment"></span><br></span><%% subline_number++; %><%% } %></span></p>
 	</script>
 
 	<script type="text/template" id="actNavigationItemViewTemplate">

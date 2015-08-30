@@ -69,29 +69,36 @@ It's possible to change the checkbox icon by adding classes:
  */
 
 $placeholder-color:lighten($blue, 10%);
+$placeholder-font-style:italic;
 
 :input-placeholder {
   color: $placeholder-color;
+  font-style: $placeholder-font-style;
 }
 
 ::input-placeholder {
   color: $placeholder-color;
+  font-style: $placeholder-font-style;
 }
 
 ::-webkit-input-placeholder {
    color: $placeholder-color;
+   font-style: $placeholder-font-style;
 }
 
 :-moz-placeholder { /* Firefox 18- */
    color: $placeholder-color;  
+   font-style: $placeholder-font-style;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: $placeholder-color;  
+   color: $placeholder-color;
+   font-style: $placeholder-font-style;
 }
 
 :-ms-input-placeholder {  
-   color: $placeholder-color;  
+   color: $placeholder-color;
+   font-style: $placeholder-font-style;
 }
 
 input[type="text"],
@@ -109,6 +116,7 @@ input[type="search"] {
   font-size:0.6em;
   outline: 1px solid lighten($night, 10%);
   background-color:$blue;
+  color:#cdd;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -119,6 +127,7 @@ input[type="search"] {
   text-transform: none;
 }
 
+textarea,
 input,
 select,
 option,
@@ -156,6 +165,7 @@ fieldset {
   z-index:-1;
 }
 
+textarea,
 button,
 input,
 legend,
@@ -176,6 +186,11 @@ textarea {
   display:block;
   padding:0.75em;
   width:100%;
+  font-size:0.6em;
+  border:none;
+  outline: 1px solid lighten($night, 10%);
+  background-color:$blue;
+  color:#cdd;
 }
 
 .select {
@@ -214,7 +229,7 @@ button,
   transition:all 0.3s ease-in-out;
   overflow:hidden;
   &:hover {
-    color:$lightyellow;
+    color:$yellow;
     transform:scale(1.025);
   }
 }
@@ -620,7 +635,11 @@ form {
 }
 
 .form__feedback {
+  padding:0.25em 0;
+  font-size:0.8em;
+  line-height:1em;
   font-style: italic;
+  color:#cdd;
 }
 
 form.form--success input[type="submit"] {
