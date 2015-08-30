@@ -1,5 +1,8 @@
 .play {
 	@extend .clearfix;
+	width:100%;
+	margin:1em auto;
+	max-width:50em;
 }
 
 .line.stage_instructions .character {
@@ -8,4 +11,35 @@
 
 .line.stage_instructions {
 	font-style:italic;
+}
+
+#act__container {
+	list-style-type: none;
+	padding:1em;
+	margin:0;
+}
+
+.line {
+	@include layout(12 0.25 after);
+	@extend .clearfix;
+}
+
+.character {
+	@include span(2 of 12);
+	font-variant: small-caps;
+	font-weight: 300;
+}
+
+.line__content {
+	display:block;
+	@include span(10 of 12 last);
+}
+
+.character,
+.line__content {
+	@media all and (max-width: 800px) {
+		width:100%;
+		float:none;
+		clear:both;	
+	}
 }

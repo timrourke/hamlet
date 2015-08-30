@@ -15,7 +15,8 @@
 */
 
 $night: #242331; //rgba(36, 35, 49, 100)
-$blue: #303245;
+$blue: #243245;
+$bright-blue: saturate(lighten($blue, 20%), 35%);
 $brown: #433a3f;
 $burnt: #533e2d; //rgba(83, 62, 45, 100)
 $gold: #ECD077; //rgba(162, 112, 53, 100)
@@ -24,9 +25,10 @@ $yellow: #b88b4a; //rgba(184, 139, 74, 100)
 $lightyellow: #ddca7d; //rgba(221, 202, 125, 100)
 $green: #4CC66E;
 $red: #BD3229;
+$cream:#c7bfb7;
 
 $neutral-input-color: lighten($blue, 15%);
-$confirm-input-color: lighten($blue, 15%);
+$confirm-input-color: lighten($blue, 30%);
 $active-input-color: lighten($blue, 45%);
 
 $color__link: saturate(lighten($blue, 15%), 30%);

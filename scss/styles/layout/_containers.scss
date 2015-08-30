@@ -1,40 +1,32 @@
 //Clean sticky footer
 html, body {
-  height:100%;
+  height:100%; //clean sticky footer
   color: $typl8-copy-color;
 }
 
-body {
-	background:#c7bfb7;	
+$footer-height:10em;
+
+div.outer-wrapper {
+	position:relative;
+	background:$cream;
+	height: 100%;
+	overflow:hidden;
 }
 
-#act__container {
-	list-style-type: none;
-	padding:1em;
-	margin:0;
+div.wrapper {
+	position:relative;
+	left:0;
+	height:100%;
+	z-index:1000;
 }
 
-.line {
-	@include layout(12 0.25 after);
-	@extend .clearfix;
+.inner-wrapper {
+	height:100%;
+	overflow-y:scroll;
+	z-index:1000;
 }
 
-.character {
-	@include span(2 of 12);
-	font-variant: small-caps;
-	font-weight: 300;
-}
-
-.line__content {
-	display:block;
-	@include span(10 of 12 last);
-}
-
-.character,
-.line__content {
-	@media all and (max-width: 800px) {
-		width:100%;
-		float:none;
-		clear:both;	
-	}
+div.footer-wrapper {
+	width:100%; //clean sticky footer
+	height:$footer-height; //clean sticky footer
 }

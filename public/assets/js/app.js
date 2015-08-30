@@ -2,17 +2,6 @@ var hamlet = hamlet || {};
 hamlet.blueprints = hamlet.blueprints || {};
 hamlet.active = hamlet.active || {};
 
-$('body').on('click', '.js-pushMenu__main-toggle', function(e) {
-  e.preventDefault();
-  $('.pushMenu__sub-item').removeClass('open');
-  $(this).parent().find('.pushMenu__sub-item').addClass('open');
-});
-
-$('body').on('click', '.js-pushMenu__toggle', function(e) {
-  e.preventDefault();
-  $('body').toggleClass('js-pushMenu--open');
-});
-
 $.ajaxSetup({
 	headers: {
 		'x-access-control': window.localStorage.getItem('token')

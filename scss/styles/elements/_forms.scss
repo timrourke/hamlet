@@ -68,6 +68,32 @@ It's possible to change the checkbox icon by adding classes:
  * Global form element styles
  */
 
+$placeholder-color:lighten($blue, 10%);
+
+:input-placeholder {
+  color: $placeholder-color;
+}
+
+::input-placeholder {
+  color: $placeholder-color;
+}
+
+::-webkit-input-placeholder {
+   color: $placeholder-color;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: $placeholder-color;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: $placeholder-color;  
+}
+
+:-ms-input-placeholder {  
+   color: $placeholder-color;  
+}
+
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -75,32 +101,51 @@ input[type="password"],
 input[type="search"] {
   position:relative;
   height:u(1.6rem);
-  border:0;
+  border:none;
   border-radius:0;
   display:inline-block;
   margin: $typl8-indent-val/2 auto;
-  padding:0 0.75em;
+  padding:0 0.5em;
   font-size:0.6em;
-  border: u(.075rem) solid #ddd;
+  outline: 1px solid lighten($night, 10%);
+  background-color:$blue;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
+  -webkit-font-feature-settings: normal;
+  -moz-font-feature-settings: normal;
+  -ms-font-feature-settings: normal;
+  font-feature-settings: normal;
+  text-transform: none;
 }
 
-.js {
-  input,
-  select,
-  option,
-  button {
-    outline:0;
+input,
+select,
+option,
+button {
+  border:none;
+  transition:outline 0.3s ease-in-out;
+  &:focus {
+    outline:1px solid $yellow;
+    outline-offset:0;
   }
 }
 
 form {
   @extend .clearfix;
-  background-color:#f5f5f5;
+  background-color:lighten($blue, 5%);
   padding:0.5em;
   margin-bottom: $typl8-indent-val;
+}
+
+label {
+  @extend %typl8-ot--smcp;
+  text-transform: lowercase;
+  color: $yellow;
+  & input {
+    margin-top:0;
+    margin-bottom:0.75em;
+  }
 }
 
 fieldset {
@@ -574,10 +619,14 @@ form {
   transition:all 0.3s ease-out;
 }
 
-form.form--success {
-  outline: 2px solid $green;
+.form__feedback {
+  font-style: italic;
 }
 
-form.form--error {
-  outline: 2px solid $red;
+form.form--success input[type="submit"] {
+  outline: 1px solid $green;
+}
+
+form.form--error input[type="submit"] {
+  outline: 1px solid $red;
 }

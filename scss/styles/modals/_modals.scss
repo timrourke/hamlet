@@ -3,7 +3,8 @@
 	transition:opacity 0.3s ease-out;
 }
 
-.overlay.open {
+.overlay.open,
+.js-pushMenu--open .overlay {
 	position:absolute;
 	top:0;
 	left:0;
@@ -12,6 +13,7 @@
 	background-color:rgba(0,0,0,0.5);
 	opacity:1;
 	transition:opacity 0.3s ease-out;
+	z-index:1;
 }
 
 .modal {
