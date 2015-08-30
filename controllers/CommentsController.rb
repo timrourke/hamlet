@@ -89,7 +89,7 @@ class CommentsController < ApplicationController
 		end
 	end
 
-	put '/' do
+	put '/upvote' do
 		validate_token
 
 		request.body.rewind
@@ -109,34 +109,133 @@ class CommentsController < ApplicationController
 
 			@comment = Comment.find(@request_body['id'])
 
+			@upvotes = @comment.upvotes.to_a
+			@downvotes = @comment.downvotes.to_a
+
+			if !@upvotes.include?(@user.id)
+				@upvotes.push(@user.id)
+				
+				if @downvotes.include?(@user.id)
+					@downvotes.delete(@user.id)
+				end
+
+				@comment.upvotes = @upvotes
+				@comment.downvotes = @downvotes
+
+				if @comment.save
+
+					content_type :json				
+					status 200
+
+					# return_message = {
+					# 	:id => @comment.id,
+					# 	:user_id => @comment.user_id,
+					# 	:created => @comment.created,
+					# 	:modified => @comment.modified,
+					# 	:act => @comment.act,
+					# 	:scene => @comment.scene,
+					# 	:line => @comment.line,
+					# 	:subline => @comment.subline,
+					# 	:comment => @comment.comment,
+					# 	:upvotes => @comment.upvotes.to_a.length,
+					# 	:downvotes => @comment.downvotes.to_a.length
+					# }
+
+					# return_message.to_json
+
+					@comment.to_json
+				else
+					#return early if comment not saved
+					return_message = {
+						:status => 'error',
+						:message => "Sorry, your vote was unsuccessful. Please try again."
+					}
+					halt 500, {
+						'Content-Type' => 'application/json'
+					}, return_message.to_json
+				end
+			else
+				#user has already upvoted this comment, return unmodified comment.
+				content_type :json				
+				status 200
+				@comment.to_json
+			end
+			
+		end
+	end
+
+	put '/downvote' do
+		validate_token
+
+		request.body.rewind
+		@request_body = JSON.parse(request.body.read.to_s)
+
+		if (!@user = User.select('id, user_name, user_email, created, modified').find(@decoded_token[0]['user_id']))
+			#return early if no user found
+			return_message = {
+				:status => 'error',
+				:message => "Invalid user. Please sign up or log in and try again."
+			}
+			halt 401, {
+				'Content-Type' => 'application/json'
+			}, return_message.to_json
+
+		else
+
+			@comment = Comment.find(@request_body['id'])
 
 			@upvotes = @comment.upvotes.to_a
-			@upvotes.push(@user.id)
+			@downvotes = @comment.downvotes.to_a
 
-			@comment.upvotes = @upvotes
+			if !@downvotes.include?(@user.id)
+				@downvotes.push(@user.id)
 
-			@comment.save
+				if @upvotes.include?(@user.id)
+					@upvotes.delete(@user.id)
+				end
 
-			content_type :json				
-			status 200
+				@comment.upvotes = @upvotes
+				@comment.downvotes = @downvotes
 
-			# return_message = {
-			# 	:id => @comment.id,
-			# 	:user_id => @comment.user_id,
-			# 	:created => @comment.created,
-			# 	:modified => @comment.modified,
-			# 	:act => @comment.act,
-			# 	:scene => @comment.scene,
-			# 	:line => @comment.line,
-			# 	:subline => @comment.subline,
-			# 	:comment => @comment.comment,
-			# 	:upvotes => @comment.upvotes.to_a.length,
-			# 	:downvotes => @comment.downvotes.to_a.length
-			# }
+				if @comment.save
 
-			# return_message.to_json
+					content_type :json				
+					status 200
 
-			@comment.to_json
+					# return_message = {
+					# 	:id => @comment.id,
+					# 	:user_id => @comment.user_id,
+					# 	:created => @comment.created,
+					# 	:modified => @comment.modified,
+					# 	:act => @comment.act,
+					# 	:scene => @comment.scene,
+					# 	:line => @comment.line,
+					# 	:subline => @comment.subline,
+					# 	:comment => @comment.comment,
+					# 	:upvotes => @comment.upvotes.to_a.length,
+					# 	:downvotes => @comment.downvotes.to_a.length
+					# }
+
+					# return_message.to_json
+
+					@comment.to_json
+				else
+					#return early if comment not saved
+					return_message = {
+						:status => 'error',
+						:message => "Sorry, your vote was unsuccessful. Please try again."
+					}
+					halt 500, {
+						'Content-Type' => 'application/json'
+					}, return_message.to_json
+				end
+			else
+				#user has already upvoted this comment, return unmodified comment.
+				content_type :json				
+				status 200
+				@comment.to_json
+			end
+			
 		end
 	end
 end

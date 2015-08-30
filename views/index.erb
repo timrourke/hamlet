@@ -24,6 +24,11 @@
 	<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 </head>
 <body>
+	<nav class="pushMenu">
+		<ul id="play__navigation" class="pushMenu__main">
+		
+		</ul>	
+	</nav>
 	<div class="site-header">
 		<div class="utility-nav">
 			<form action="/api/users/login" method="post" id="js-login-form">
@@ -54,13 +59,11 @@
 		</form>
 	</div>
 
+	<button class="pushMenu__toggle js-pushMenu__toggle">=</button>
+
 	<div class="play col-group">
 		<ul id="act__container" class="col-3-4">
 		
-		</ul>
-
-		<ul id="play__navigation" class="col-1-4 col-last">
-			
 		</ul>
 	</div>
 
@@ -111,15 +114,18 @@
 	</script>
 
 	<script type="text/template" id="actNavigationItemViewTemplate">
-		<h5>Act <%%= actNumber %></h5>
-		<ul>
+		<button class="js-pushMenu__main-toggle pushMenu__main-toggle" type="button">
+			<h5 class="pushMenu__header">Act <%%= actNumber %></h5>
+		</button>
+		<ul class="pushMenu__sub">
 		<%% var sceneCounter = 1; %>
 		<%% _.each(scenes, function(scene){ %>
-			<a href="/act/<%%= actNumber %>/scene/<%%= sceneCounter %>" rel="bookmark">	
-				<li>
-					<h6><%%= scene.name %>&mdash;<%%= scene.setting %></h6>
-				</li>
-			</a>
+			<li class="pushMenu__sub-item">
+				<a href="/act/<%%= actNumber %>/scene/<%%= sceneCounter %>" rel="bookmark">	
+					<h6><%%= scene.name %></h6>
+					<em><%%= scene.setting %></em>
+				</a>
+			</li>
 		<%% sceneCounter++; %>
 		<%% }); %>
 		</ul>

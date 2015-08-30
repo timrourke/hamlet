@@ -28,5 +28,5 @@ a {
 }
 
 .footnote__link {
-	@include typl8-smallcaps(#444, 400);
+	@include typl8-smallcaps(current-color, 400);
 }

@@ -16,6 +16,7 @@
 
 $night: #242331; //rgba(36, 35, 49, 100)
 $blue: #303245;
+$brown: #433a3f;
 $burnt: #533e2d; //rgba(83, 62, 45, 100)
 $gold: #ECD077; //rgba(162, 112, 53, 100)
 $orange: $gold;
@@ -24,10 +25,10 @@ $lightyellow: #ddca7d; //rgba(221, 202, 125, 100)
 $green: #4CC66E;
 $red: #BD3229;
 
-$neutral-input-color: $lightyellow;
-$confirm-input-color: $lightyellow;
-$active-input-color: $lightyellow;
+$neutral-input-color: lighten($blue, 15%);
+$confirm-input-color: lighten($blue, 15%);
+$active-input-color: lighten($blue, 45%);
 
-$color__link: $gold;
-$color__link-hover: saturate(lighten($gold, 25%), 80%);
-$color__link-visited: $gold;
+$color__link: saturate(lighten($blue, 15%), 30%);
+$color__link-hover: $red;
+$color__link-visited: saturate(lighten($blue, 15%), 30%);

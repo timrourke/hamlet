@@ -55,11 +55,27 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 		return this;
 	},
 	downvote: function() {
-		alert('downvote');
+		this.model.save({downvotes: (this.model.get('downvotes') - 1) }, {
+			url: '/api/comments/downvote',
+			wait: true,
+			error: function(model, response, options) {
+				console.log(model)
+				console.log(response);
+				// var statusCode = response.status;
+
+				// switch (statusCode) {
+				// 	default:
+				// 		appendFormMessage(formId, response.responseJSON.status, response.responseJSON.message);
+				// 		break;
+				// }
+
+				return false;
+			}
+		});
 	},
 	upvote: function() {
 		this.model.save({upvotes: (this.model.get('upvotes') + 1) }, {
-			url: '/api/comments',
+			url: '/api/comments/upvote',
 			wait: true,
 			error: function(model, response, options) {
 				console.log(model)

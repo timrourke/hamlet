@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-	background-image:linear-gradient(to bottom, rgba(140,123,100,0.5), rgba(140,123,100,0.5)), url('/assets/images/backgrounds/billie_holiday.png');	
+	background:#c7bfb7;	
 }
 
 #act__container {
@@ -14,15 +14,27 @@ body {
 	margin:0;
 }
 
-.line__content {
-	display:block;
-	margin:0 auto;
-	width:100%;
-	max-width:30em;
+.line {
+	@include layout(12 0.25 after);
+	@extend .clearfix;
 }
 
 .character {
-	float:left;
+	@include span(2 of 12);
 	font-variant: small-caps;
 	font-weight: 300;
+}
+
+.line__content {
+	display:block;
+	@include span(10 of 12 last);
+}
+
+.character,
+.line__content {
+	@media all and (max-width: 800px) {
+		width:100%;
+		float:none;
+		clear:both;	
+	}
 }
