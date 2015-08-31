@@ -192,7 +192,8 @@ gulp.task('svgstore', function() {
       parserOptions: { xmlMode: true }
     }))
     .pipe(svgstore())
-    .pipe(gulp.dest('./public/assets/svg/'));
+    .pipe(rename('svg-source.svg.erb'))
+    .pipe(gulp.dest('./views/svg/'));
 });
 
 // watch tasks and serve via browserSync

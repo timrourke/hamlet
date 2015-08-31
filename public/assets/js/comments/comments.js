@@ -57,7 +57,9 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 		self.render();
 	}, 
 	render: function() {
+		var self = this;
 		this.options.targetElement.append(this.$el.html(this.template(this.model.attributes)));
+		
 		return this;
 	},
 	downvote: function() {
@@ -139,19 +141,31 @@ hamlet.blueprints.CommentsView = Backbone.View.extend({
 			this.collection.each(function(model) {
 				model.targetElement = '#line-' + model.get('act') + '-' + model.get('scene') + '-' + model.get('line') + '-' + model.get('subline');
 
-				
+				var targetElementModel = hamlet.active.scene.get({ cid: $(model.targetElement).attr('data-cid') });
 
-				if ( ! $(model.targetElement + ' .comments .comments__list').length ) {
-					$(model.targetElement).append($( '<div class="comments"><ul class="comments__list"></ul></div>' ));	
+				var commentCount = targetElementModel.get('commentCount');
+
+				var commentLengthInDom = $(model.targetElement + ' li.comment').length + 1;
+
+				if ( !$(model.targetElement + ' .comments__list').length ) {
+					$(model.targetElement).addClass('js-line__hasComment');
+					$(model.targetElement).append($( '<div class="comments"><span class="js-commentForm-toggle commentForm-toggle">Add a Comment +</span><span class="js-hide-comments">Hide Comments</span><ul class="comments__list"></ul></div>' ));
+					targetElementModel.set('commentCount', 1, {
+						skipRender: true
+					});
 				}
 				
+				targetElementModel.set('commentCount', commentLengthInDom, {
+					skipRender: true
+				});
+								
 				var commentItem = new hamlet.blueprints.CommentView({
 					model: model,
 					targetElement: $(model.targetElement + ' .comments .comments__list')
 				}, this);
 
 				hamlet.active.commentItems.push(commentItem);
-				
+				//targetElementModel.set('commentCount', (commentCount+1));
 				// hamlet.comments[model.get('act')] = hamlet.comments[model.get('act')] || [];
 				// hamlet.comments[model.get('act')][model.get('scene')] = hamlet.comments[model.get('act')][model.get('scene')] || [];
 				// hamlet.comments[model.get('act')][model.get('scene')][model.get('line')] = hamlet.comments[model.get('act')][model.get('scene')][model.get('line')] || [];

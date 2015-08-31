@@ -1,0 +1,29 @@
+.site-header {
+	height:15em;
+}
+
+.site-title {
+	font-weight:600; 
+	padding:1em 0 0 0;
+	margin-bottom:0;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+.site-title,
+.site-subtitle {
+	font-family:$heading-font;
+	font-weight:600;
+	margin-top:0.5em;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+.site-subtitle {
+	font-weight:400;
+}
+
+.site-title a,
+.site-subtitle {
+	color:$blue;
+}

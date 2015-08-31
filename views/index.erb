@@ -23,7 +23,10 @@
 
 	<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 </head>
-<body>
+<body>	
+	<div style="display:none;">
+		<%=  erb :'svg/svg-source.svg' %>	
+	</div>
 	
 	<button class="pushMenu__toggle js-pushMenu__toggle" aria-controls="primary-menu" aria-expanded="false">
     <div class="menu-toggle__top"></div>
@@ -96,8 +99,9 @@
 				<div class="site-header">
 					<div class="site-branding">
 						<h1 class="site-title">
-							<a href="/" rel="bookmark">Hamlet</a>
+							<a href="/" rel="bookmark">Hamlet,</a>
 						</h1>
+						<h4 class="site-subtitle">Prince of Denmark</h4>
 					</div>
 				</div>
 
@@ -115,21 +119,19 @@
 
 	<script type="text/template" id="commentTemplate">
 		<%% var date_created = new Date( created ); %>
-		
-					<article class="comment__wrapper">
-						<header class="comment__header">
-							<h6 class="comment__author"><%%= user_name %></h6>
-							<span class="comment__date-created"><%%= (date_created.getMonth() + 1) + '.' + date_created.getDate() + '.' +  date_created.getFullYear() %></span>
-						</header>
-						<div class="comment__body">
-							<%%= comment %>
-						</div>
-						<footer class="comment__footer">
-							<%% if (!upvotes) { upvotes = [] }; if (!downvotes) { downvotes = [] }; %>
-							<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">&darr;</a> <a href="#upvote" class="comment__button comment__upvote">&uarr;</a> <a href="#reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a>
-						</footer>
-					</article>
-			
+		<article class="comment__wrapper">
+			<header class="comment__header">
+				<h6 class="comment__author"><%%= user_name %></h6>
+				<span class="comment__date-created"><%%= (date_created.getMonth() + 1) + '.' + date_created.getDate() + '.' +  date_created.getFullYear() %></span>
+			</header>
+			<div class="comment__body">
+				<%%= comment %>
+			</div>
+			<footer class="comment__footer">
+				<%% if (!upvotes) { upvotes = [] }; if (!downvotes) { downvotes = [] }; %>
+				<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">&darr;</a> <a href="#upvote" class="comment__button comment__upvote">&uarr;</a> <a href="#reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a>
+			</footer>
+		</article>
 	</script>
 
 	<script type="text/template" id="commentFormTemplate">
@@ -150,7 +152,7 @@
 	
 	<script type="text/template" id="lineTemplate">
 		<%% subline_number = 1; %>
-		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span id="line-<%%= act %>-<%%= scene %>-<%%= lineNumber %>-<%%= subline_number %>" data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" data-subline_number="<%%= subline_number %>" class="line__single-line"><%%= lines[i] %><span class="line__comment"></span><br></span><%% subline_number++; %><%% } %></span></p>
+		<p class="line <%%= character %>"><span class="character <%%= character %>"><%%= character %></span><span class="line__content"><%% for (var i = 0; i < lines.length; i++){ %><span id="line-<%%= act %>-<%%= scene %>-<%%= lineNumber %>-<%%= subline_number %>" data-cid="<%%= cid %>" data-act="<%%= act %>" data-scene="<%%= scene %>" data-line_number="<%%= lineNumber %>" data-subline_number="<%%= subline_number %>" class="line__single-line"><%%= lines[i] %><button class="js-comment-toggle js-commentForm-toggle commentForm-toggle"><svg viewBox="0 0 100 100" class="shape-wordbubble"><use xlink:href="#wordbubble"></use><text class="commentCount__indicator" x="50" y="60">+</text></svg></button><br><span class="line__comment"></span></span><%% subline_number++; %><%% } %></span></p>
 	</script>
 
 	<script type="text/template" id="actNavigationItemViewTemplate">

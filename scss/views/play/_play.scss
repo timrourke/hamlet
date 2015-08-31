@@ -17,7 +17,7 @@
 
 #act__container {
 	list-style-type: none;
-	padding:1em;
+	padding:1em 1.25em;
 	margin:0;
 }
 
@@ -44,4 +44,8 @@
 		float:none;
 		clear:both;	
 	}
+}
+
+.line__single-line {
+	position:relative;
 }

@@ -29,27 +29,6 @@ Backbone.sync = function (method, model, options) {
   backboneSync(method, model, options);
 };
 
-// Method to override Backbone's Collection.prototype.create() method with additional headers containing our token
-// Store "old" create function
-// var backboneCreate = Backbone.Collection.prototype.create;
-
-// // Now override
-// Backbone.Collection.prototype.create = function (model, options) {
-  
-//    * "options" represents the options passed to the underlying $.ajax call         
-   
-//   var token = window.localStorage.getItem('token');
-
-//   if (token) {
-//     options.headers = {
-//       'x-access-token': token
-//     }
-//   }
-
-//   // call the original function
-//   backboneCreate(model, options);
-// };
-
 function setToken(token) {
 
 	$.ajaxSetup({
@@ -98,7 +77,11 @@ function appendFormMessage(formId, status, message) {
 			break;
 		case 'success':
 			$form.addClass('form--success').removeClass('form--error');
-			$form.velocity('transition.slideUpOut');
+			$form.velocity('transition.slideUpOut', {
+				complete: function() {
+					$form.remove();
+				}
+			});
 			break;
 		default:
 			

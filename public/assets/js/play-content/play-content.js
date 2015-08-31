@@ -43,6 +43,9 @@ hamlet.blueprints.Acts = Backbone.Collection.extend({
 hamlet.blueprints.LineModel = Backbone.Model.extend({
 	initialize: function() {
 		console.log('new hamlet.LineModel instantiated');
+	},
+	defaults: {
+		commentCount: 0
 	}
 });
 
@@ -87,13 +90,21 @@ hamlet.blueprints.SceneView = Backbone.View.extend({
 hamlet.blueprints.LineView = Backbone.View.extend({
 	tagName: 'li',
 	events: {
-		'click .line__single-line': 'showCommentsForm'
+		'click .js-comment-toggle': 'showComments',
+		'click .js-commentForm-toggle': 'showCommentsForm',
+		'click .line__single-line': 'toggleCommentFormToggle',
+		'click .js-hide-comments': 'hideComments'
 	},
 	initialize: function() {
 		var self = this;
 		this.template = _.template($('#lineTemplate').html());
-		this.model.on('change', function() {
-			self.render();
+		this.model.on('change', function(event, options) {
+			if (!options.skipRender) {
+				self.render();	
+			}
+		});
+		this.model.on('change:commentCount', function() {
+			self.$el.find('.commentCount__indicator').html( self.model.get('commentCount'));
 		});
 		self.render();
 	},
@@ -101,25 +112,38 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 		var lines = this.model.get('line');
 		lines = lines.split('<br>');
 		this.model.set('lines', lines);
-		this.$el.html(this.template(this.model.attributes));
+		this.model.set('cid', this.model.cid);
+		this.$el.html(this.template(this.model.toJSON()));
 		return this;
+	},
+	showComments: function(evt) {
+		this.$el.find('.comment, span.js-commentForm-toggle, span.js-hide-comments').velocity('transition.slideUpIn', {
+			display: 'block'
+		});
 	},
 	showCommentsForm: function(evt) {
 		//return early unless 'dismiss' button is clicked.
 		//prevents undesired closing of comment form modal.
-		if (evt.target.className != 'line__single-line') {
-			return false;
+		if (this.model.get('commentCount') > 0 && !$(evt.target).hasClass('js-commentForm-toggle')) {
+			return;
 		}
 		if (hamlet.active.commentFormView) {
 			hamlet.active.commentFormView.close();
 		}
 		var self = this;
-		var subline_number = $(evt.target).data('subline_number');
+		var subline_number = $(evt.target).parent().parent().parent().data('subline_number');
+		console.log(subline_number);
 		this.model.attributes.subline_number = subline_number;
 		hamlet.active.commentForm = new hamlet.blueprints.CommentForm(this.model.attributes);
 		hamlet.active.commentFormView = new hamlet.blueprints.CommentFormView({
-			el: $(this.el).find(evt.target).find('.line__comment'),
+			el: $(this.el).find(evt.target).parent().parent().parent().find('.line__comment'),
 			model: hamlet.active.commentForm
 		});
+	},
+	toggleCommentFormToggle: function() {
+		this.$el.find('.commentForm-toggle').toggleClass('open');
+	},
+	hideComments: function() {
+		this.$el.find('.comment, span.js-commentForm-toggle, span.js-hide-comments').velocity('transition.slideUpOut');
 	}
 });

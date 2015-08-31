@@ -77,18 +77,14 @@ hamlet.active.logIn = function(obj) {
 		return false;
 	} 
 
-	var token = getToken();
-
-	if (token) {
-		obj.token = token;
-	}
-
 	logInObj = {
 		url: window.location.protocol + '//' + window.location.host + '/api/users/login',
 		method: 'post',
 		dataType: 'json',
 		data: obj,
 		success: function(response) {
+
+			console.log(response.token);
 
 			setToken(response.token);
 

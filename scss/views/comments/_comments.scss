@@ -1,4 +1,5 @@
 .comments {
+	@extend .clearfix;
 	position:relative;
 	font-family:sans-serif;
 	font-style:normal;
@@ -8,14 +9,44 @@
 	margin:0;
 	padding:0;
 	list-style-type:none;
+	clear:both;
 }
 
 .comments .comment {
+	padding:0.5em;
+}
+
+.comments .comment,
+.comments span.js-commentForm-toggle,
+.comments span.js-hide-comments {
 	background-color:#f5f5f5;
 	font-size:0.6em;
-	padding:0.5em;
 	margin-top:1px;
 	margin-bottom:1px;
+	overflow-y:hidden;
+	display:none;
+}
+
+.comments span.js-commentForm-toggle,
+.comments span.js-hide-comments {
+	padding-top:0.8em;
+	width:12em;
+	font-family:$serif;
+	font-style:italic;
+	background-color:transparent;
+	transition:color 0.3s ease-in-out;
+	&:hover {
+		cursor: pointer;
+		color:$bright-blue;
+	}
+}
+.comments span.js-commentForm-toggle {
+	float:left;
+}
+
+.comments span.js-hide-comments {
+	float:right;
+	text-align:right;
 }
 
 .comments .comment__body {
@@ -80,9 +111,61 @@
 .commentForm {
 	font-style:normal;
 	position:relative;
-	margin:0.5em 0;
+	margin:0.5em 0 -1em 0;
+	z-index:1000;
 }
 
 .commentForm h4 {
 	margin-bottom:0;
+}
+
+.js-line__hasComment {
+	border-bottom:1px dotted $blue;
+}
+
+button.commentForm-toggle {
+	opacity:0;
+	transform:translateX(-100%);
+	position:absolute;
+	top:-0.5em;
+	left:100%;
+	margin:0 0 0 0.5em;
+	width:2.75em;
+	height:2.75em;
+	background-image:none;
+	background:transparent;
+	text-align:center;
+	padding:0;
+	border:none;
+	outline:none;
+	box-shadow: none;
+	fill:transparent;
+	stroke:#999;
+	stroke-width:15;
+	&:hover {
+		transform:none !important;
+		color:$active-input-color;
+		stroke:$active-input-color;
+		text {
+			fill:$active-input-color;
+		}
+	}
+	&:focus {
+		outline:none;
+	}
+	text {
+		transition:all 0.3s ease-in-out;
+		font-family:sans-serif;
+		font-weight:400;
+		font-style:normal;
+		stroke:none;
+		font-size:40px;
+		fill:#999;
+		text-anchor:middle;
+	}
+	&.open,
+	.line__single-line:hover & {
+		opacity:1;
+		transform:translateX(0);
+	}
 }
