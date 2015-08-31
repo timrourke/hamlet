@@ -221,11 +221,17 @@ hamlet.blueprints.CommentFormView = Backbone.View.extend({
 		self.render();
 	},
 	render: function() {
-		this.$el.append(this.template(this.model.attributes));
+		this.$el.append(this.template(this.model.attributes)).find('.commentForm').velocity('transition.slideUpIn');
 		return this;
 	},
 	dismiss: function() {
-		this.$el.empty();
+		var self = this;
+		this.$el.find('.commentForm').velocity('transition.slideUpOut', {
+			complete: function() {
+				self.$el.find('.commentForm').remove();
+				self.$el.empty();
+			}
+		});
   	this.unbind();
 	},
 	submit: function(e) {
