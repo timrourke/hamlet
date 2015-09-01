@@ -65,17 +65,16 @@ hamlet.blueprints.CurrentUser = Backbone.Model.extend({
 	initialize: function() {
 		var self = this;
 		console.log('A CurrentUser has been born.');
-		new hamlet.blueprints.CurrentUserView({
+		hamlet.active.currentUserView = new hamlet.blueprints.CurrentUserView({
 			model: self
 		});
 	}
 });
 
 hamlet.blueprints.CurrentUserView = Backbone.View.extend({
-	el: $('.site-header'),
+	el: $('.currentUser-panel'),
 	initialize: function() {
 		var self = this;
-		this.el = $('site-header');
 		this.template = _.template($('#currentUserViewTemplate').html());
 		this.model.on('change', function() {
 			self.render();
@@ -84,7 +83,6 @@ hamlet.blueprints.CurrentUserView = Backbone.View.extend({
 	},
 	render: function() {
 		var self = this;
-		console.log(this)
 		this.$el.prepend(this.template(this.model.attributes))
 	}
 });
@@ -106,18 +104,17 @@ hamlet.active.logIn = function(obj) {
 		data: obj,
 		success: function(response) {
 
-			console.log(response.token)
-
 			setToken(response.token);
-
-			console.log(getToken());
 
 			$('body').removeClass('js-pushMenu--open');
   		$('.pushMenu .utility-nav, .pushMenu .form__signup').removeClass('open');
 
 			hamlet.active.currentUser = new hamlet.blueprints.CurrentUser(response.user);
 
-			appendFormMessage(formId, response.status, response.message);
+			setUser(response.user);
+
+			$(formId).find('input:not(input[type="submit"]), textarea').val('');
+			$(formId).find('input, textarea').prop('disabled', false);
 
 			var modalObj = {
 				heading: response.status.toProperCase(),
@@ -148,11 +145,16 @@ hamlet.active.logOut = function() {
 		dataType: 'json',
 		success: function(response) {
 
-			console.log(response)
-
 			setToken(null);
 
-			console.log(getToken());
+			console.log('logging out')
+
+			if (typeof hamlet.active.currentUser != 'undefined') {
+				hamlet.active.currentUserView.close();
+				hamlet.active.currentUser.trigger('destroy');
+			}
+
+			setUser(null);
 
 			return true;
 		},

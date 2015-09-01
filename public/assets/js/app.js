@@ -28,6 +28,17 @@ function getToken() {
 	return window.localStorage.getItem('token');
 }
 
+function setUser(user) {
+	return (function(user) {
+		console.log(user)
+		window.localStorage.setItem('currentUser', JSON.stringify(user));
+	})(user);
+}
+
+function getUser() {
+	return JSON.parse(window.localStorage.getItem('currentUser'));
+}
+
 //Add toProperCase() method to String prototype for easy case manipulation
 //Credit: http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
 String.prototype.toProperCase = function () {
@@ -162,15 +173,21 @@ $(document).on('ready', function() {
 	//Init user model
 	hamlet.active.users = new hamlet.blueprints.Users({});
 
+	if (getUser()) {
+		hamlet.active.currentUser = new hamlet.blueprints.CurrentUser(getUser());
+	}
+
 	/*
 	 *	Register form submit handlers
 	 *
 	 */
 
-	$('#js-logout').on('click', function(e) {
+	$('body').on('click', '#js-logout', function(e) {
 		e.preventDefault();
 
 		hamlet.active.logOut();
+
+		return false;
 	});
 
 	$('#js-login-form').on('submit', function(e) {
@@ -187,14 +204,6 @@ $(document).on('ready', function() {
 		var obj = collectInputs('#js-signup-form');
 
 		hamlet.active.createUser(obj);
-	});
-
-	$('body').on('submit', '#js-comment-form', function(e) {
-		e.preventDefault();
-
-		var obj = collectInputs('#js-comment-form');
-
-		hamlet.active.createComment(obj);
 	});
 
 	$('body').on('submit', '#js-request-new-confirmation-email-form', function(e) {

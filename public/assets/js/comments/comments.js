@@ -46,13 +46,22 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 		'click .comment__downvote': 'downvote',
 		'click .comment__upvote': 'upvote',
 		'click .comment__reply': 'reply',
-		'click .comment__share': 'share'
+		'click .comment__share': 'share',
+		'click .comment__edit': 'edit',
+		'edited': 'render'
 	},
 	initialize: function(options) {
 		this.options = options;
 		console.log('A comment view was born.');
 		var self = this;
 		this.template = _.template($('#commentTemplate').html());
+		// this.model.on('sync', function() {
+		// 	self.render();
+		// });
+		this.model.on('update add', function() {
+			console.log(this.model);
+			self.render();
+		});
 		self.render();
 	}, 
 	render: function() {
@@ -66,14 +75,6 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 		 	});
 		}
 
-		//console.log(this.options.parentLineView);
-
-		// if (this.model.get('open')) {
-		// 	this.options.targetElement.parent().parent().find('.comment, span.js-commentForm-toggle, span.js-hide-comments').css({
-		// 		'display':'block'
-		// 	});	
-		// }
-
 		return this;
 	},
 	downvote: function(e) {
@@ -86,6 +87,8 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 				return false;
 			}
 		});
+
+		return false;
 	},
 	upvote: function(e) {
 		e.preventDefault();
@@ -97,12 +100,26 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 				return false;
 			}
 		});
+
+		return false;
 	},
 	reply: function() {
 		alert('reply');
+		return false;
 	},
 	share: function() {
 		alert('share');
+		return false;
+	},
+	edit: function(evt) {
+		this.model.set('formCssId', 'js-comment-form--edit')
+		var editingCommentForm = new hamlet.blueprints.CommentForm(this.model.toJSON());
+		new hamlet.blueprints.CommentFormView({
+			model: editingCommentForm,
+			el: this.el
+		});
+
+		return false;
 	},
 	close: function() {
 		this.unbind();
@@ -118,6 +135,7 @@ hamlet.blueprints.CommentsView = Backbone.View.extend({
 		this.collection.on('sync', function() {
 			self.render();
 		});
+		//self.render();
 	},
 	render: function() {
 		if (hamlet.active.commentItems) {
@@ -139,6 +157,10 @@ hamlet.blueprints.CommentsView = Backbone.View.extend({
 				var targetElementModel = hamlet.active.scene.get({ cid: $(model.targetElement).attr('data-cid') });
 
 				if (typeof targetElementModel != 'undefined') {
+					model.set('subline_number', model.get('subline'));
+					model.set('lineNumber', targetElementModel.get('lineNumber'));
+					model.set('line', model.get('lineNumber'));
+					//model.set('lineNumber', targetElementModel.get('lineNumber'));
 					var commentCount = targetElementModel.get('commentCount');	
 				}
 
@@ -192,6 +214,7 @@ hamlet.active.createComment = function(obj) {
 
 	hamlet.active.comments.create(obj, {
 		url: '/api/comments',
+		method: 'post',
 		wait: true,
 
 		success: function(model, response, options){
@@ -213,28 +236,70 @@ hamlet.active.createComment = function(obj) {
 	return true;
 };
 
+hamlet.active.editComment = function(model) {
+	var formId = '#js-comment-form--edit';
+
+	model.set('comment', $(formId).find('textarea[name="comment"]').val(), {
+		silent: true
+	});
+
+	if (model.get('comment').trim() == '') {
+		appendFormMessage(formId, 'error', 'Please be sure to include a comment.');
+		return false;
+	}
+
+	model.save(model.toJSON(), {
+		url: '/api/comments',
+		wait: true,
+
+		success: function(model, response, options){
+			hamlet.active.comments.fetch();
+			$(formId).velocity('transition.slideUpOut', {
+				complete: function() {
+					$(formId).remove();
+				}
+			});
+		},
+		error: function(model, response, options) {
+			var statusCode = response.status;
+
+			switch (statusCode) {
+				default:
+					appendFormMessage(formId, response.responseJSON.status, response.responseJSON.message);
+					break;
+			}
+
+			return false;
+		}
+	});
+
+	return true;
+};
+
 hamlet.blueprints.CommentForm = Backbone.Model.extend({
 	initialize: function() {
 		console.log('A CommentForm model was born.');
+	},
+	defaults: {
+		comment: '',
+		id: '',
+		formCssId: 'js-comment-form'
 	}
 });
 
 hamlet.blueprints.CommentFormView = Backbone.View.extend({
 	events: {
 		'click .commentForm__dismiss': 'dismiss',
-		'click .commentForm__submit': 'submit',
-		'submit': 'submit'
+		'click .commentForm__submit': 'submit'
 	},
 	initialize: function() {
 		console.log('A CommentFormView was born.');
 		var self = this;
 		this.template = _.template($('#commentFormTemplate').html());
-		this.model.on('change', function() {
-			self.render();
-		});
 		self.render();
 	},
 	render: function() {
+		alert('rendering comment form')
 		this.$el.append(this.template(this.model.attributes)).find('.commentForm').velocity('transition.slideUpIn');
 		return this;
 	},
@@ -251,8 +316,14 @@ hamlet.blueprints.CommentFormView = Backbone.View.extend({
 	submit: function(e) {
 		e.preventDefault();
 
-		var obj = collectInputs(this.$el);
+		if (this.$el.find('form').attr('id') == 'js-comment-form') {
+			var obj = collectInputs(this.$el.find('#js-comment-form'));
+			hamlet.active.createComment(obj);	
+		} else {
+			hamlet.active.editComment(this.model);
+		}
 
-		hamlet.active.createComment(obj);
+		return false;
+
 	}
 })

@@ -58,7 +58,6 @@
 
 						<button class="form__back-button" type="button">&loarr; Back</button>
 					</form>
-					<a id="js-logout" href="/api/logout">Log out</a>
 				</div>
 				<div class="form__signup">
 					<h4 class="menu-title">Sign Up</h3>
@@ -97,11 +96,12 @@
 
 			<div class="inner-wrapper">
 				<div class="site-header">
+					<div class="currentUser-panel"></div>
 					<div class="site-branding">
 						<h1 class="site-title">
 							<a href="/" rel="bookmark">Hamlet,</a>
 						</h1>
-						<h4 class="site-subtitle">Prince of Denmark</h4>
+						<h4 class="site-subtitle">Prince of Denmark.</h4>
 					</div>
 				</div>
 
@@ -117,7 +117,7 @@
 
 	<script type="text/template" id="currentUserViewTemplate">
 		<div class="currentUser">
-			<p>Welcome, <%%= user_name %>!</p>
+			<span>Welcome, <%%= user_name %>!</span>&mdash;<a id="js-logout" href="/api/logout">Log out</a>
 		</div>
 	</script>
 
@@ -133,18 +133,19 @@
 			</div>
 			<footer class="comment__footer">
 				<%% if (!upvotes) { upvotes = [] }; if (!downvotes) { downvotes = [] }; %>
-				<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">&darr;</a> <a href="/upvote" class="comment__button comment__upvote">&uarr;</a> <a href="/reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a>
+				<span class="comment__votes"><%%= (upvotes.length - downvotes.length) %></span> <a href="#downvote" class="comment__button comment__downvote">&darr;</a> <a href="/upvote" class="comment__button comment__upvote">&uarr;</a> <a href="/reply" class="comment__button comment__reply">Reply</a> <a href="#share" class="comment__button comment__share">Share</a> <a href="#edit" class="comment__button comment__edit">Edit</a>
 			</footer>
 		</article>
 	</script>
 
 	<script type="text/template" id="commentFormTemplate">
 		<div class="commentForm__wrapper">	
-			<form class="commentForm" action="/api/comments" method="post" id="js-comment-form">
+			<form class="commentForm" action="/api/comments" method="post" id="<%%= formCssId %>">
 				<button class="commentForm__dismiss commentForm__dismiss--top" type="button">×</button>
 				<h4>Add a comment</h4>
 				<div class="form__feedback"></div>
-				<textarea name="comment"></textarea>
+				<textarea name="comment"><%%= comment %></textarea>
+				<input type="hidden" name="id" value="<%%= id %>">
 				<input type="hidden" name="act" value="<%%= act %>">
 				<input type="hidden" name="scene" value="<%%= scene %>">
 				<input type="hidden" name="line_number" value="<%%= lineNumber %>">

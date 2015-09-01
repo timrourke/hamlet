@@ -90,6 +90,83 @@ class CommentsController < ApplicationController
 		end
 	end
 
+	put '/' do
+		validate_token
+
+		request.body.rewind
+		@request_body = JSON.parse(request.body.read.to_s)
+
+		if (!@user = User.select('id, user_name, user_email, created, modified').find(@decoded_token[0]['user_id']))
+			#return early if no user found
+			return_message = {
+				:status => 'error',
+				:message => "Invalid user. Please sign up or log in and try again."
+			}
+			halt 401, {
+				'Content-Type' => 'application/json'
+			}, return_message.to_json
+
+		else
+			
+			if @comment = Comment.find(@request_body['id']) 
+
+				@comment.user_id = @user.id
+				@comment.modified = Time.now
+				@comment.comment = @request_body['comment']
+				@comment.act = @request_body['act']
+				@comment.scene = @request_body['scene']
+				@comment.line = @request_body['line']
+				@comment.subline = @request_body['subline_number']
+
+				if @comment.save
+
+					content_type :json				
+					status 201
+
+					@comment.status = 'success'
+					@comment.message = "Thanks for your comment, #{@user.user_name}!"
+					@comment.user = @user.to_json
+
+					return_message = {
+						:user_id => @comment.user_id,
+						:created => @comment.created,
+						:modified => @comment.modified,
+						:comment => @comment.comment,
+						:act => @comment.act,
+						:scene => @comment.scene,
+						:line => @comment.line,
+						:subline => @comment.subline,
+						:status	=> @comment.status,
+						:message => @comment.message,
+						:user => @comment.user,
+						:user_name => @user.user_name
+					}
+					
+					return_message.to_json
+
+				else
+					#return error if saving to database fails
+					return_message = {
+						:status => 'error',
+						:message => "Sorry! There was a problem saving your comment. Please try again."
+					}
+					halt 500, {
+						'Content-Type' => 'application/json'
+					}, return_message.to_json
+				end
+			else
+				#return error if saving to database fails
+				return_message = {
+					:status => 'error',
+					:message => "Sorry! We were not able to locate that comment. Please check your details and try again."
+				}
+				halt 404, {
+					'Content-Type' => 'application/json'
+				}, return_message.to_json
+			end
+		end
+	end
+
 	put '/upvote' do
 		validate_token
 
