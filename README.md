@@ -22,6 +22,7 @@ Beware the sirens of stateful DOM might beckon your craft onto the rocky lee.
 
 In a second pass, I would like to rearchitect the application's components to take better advantage of Backbone.js's inbuilt messaging interface. In addition, the following features have yet to be addressed in full:
 
+- Adding in the footnotes from the original text
 - Replies to comments
 - Dynamic sorting of comments upon upvoting/downvoting
 - A richer social experience with personalized profiles and chat
@@ -53,3 +54,9 @@ In a second pass, I would like to rearchitect the application's components to ta
 6. Quit postgres and run `bundle exec rackup` in the root folder of the project
 7. Navigate to `localhost:9292`, or whatever URL you've configured Rack/Unicorn/etc. to serve the project to.
 8. Read Hamlet and cry into your sherry.
+
+## About the text used
+
+For this project, I used a public domain version of Shakespeare's Hamlet found on [Project Gutenberg](http://www.gutenberg.org/files/27761/27761-h/27761-h.htm). This version of the play was heavily edited by Charles Kean, F.S.A. for a performance of the play on January 10, 1859. The primary revisions were for modernization of spelling, not for content or phraseology.
+
+In addition to the modernized language in the Project Gutenberg source text, Charles Kean wrote extensive footnotes. These have yet to be implemented in the project, but will be the next feature added to the application in future versions. 
