@@ -8,6 +8,8 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/node_modules/
+/bower_components/
 
 ## Specific to RubyMotion:
 .dat*
