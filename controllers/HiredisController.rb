@@ -14,8 +14,8 @@ class HiredisController < ApplicationController
 
 	def self.redis_save_token_id(user_id, iat, jti)
 		redis_write(user_id, [iat, jti].to_json)
-		puts '------------------------putsing redis token store value-------'
-		puts JSON.parse(redis_read(user_id))
+		# puts '------------------------putsing redis token store value-------'
+		# puts JSON.parse(redis_read(user_id))
 	end
 
 	def self.redis_read_token_id(user_id)

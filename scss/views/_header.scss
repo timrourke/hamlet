@@ -72,8 +72,16 @@
 }
 
 .site-branding--about {
+	.site-logo {
+		@media all and (max-width: 600px) {
+				margin-top:2em;
+		}
+	}
 	.site-title {
 		margin-top:0.25em;
+		@media all and (max-width: 600px) {
+				font-size:4em;
+		}
 	}
 }
 

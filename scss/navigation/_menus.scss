@@ -22,6 +22,9 @@
   width:320px;
   z-index:30000;
   overflow-y:scroll;
+  @media all and (max-width:600px) {
+    font-size:1.25em;
+  }
 }
 
 .pushMenu__main,

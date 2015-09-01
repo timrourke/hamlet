@@ -61,8 +61,8 @@ class UsersController < ApplicationController
 		exp = Time.now.to_i + 4 * 3600
 		payload = { :user_id => user.id, :exp => exp, :iat => iat, :jti => jti }
 		token = JWT.encode payload, JWT_SECRET, 'HS256'
-		puts '-------------------------token from token creation at login-------------------------'
-		puts token
+		# puts '-------------------------token from token creation at login-------------------------'
+		# puts token
 		replace_token(token)
 		token
 	end
@@ -215,9 +215,9 @@ class UsersController < ApplicationController
 		#a token: https://auth0.com/blog/2015/03/10/blacklist-json-web-token-api-keys/
 
 		#Use hiredis to act as the key/value store for token AUD/JTI pairs
-		validate_token
+		# validate_token
 
-		puts @decoded_token
+		# puts @decoded_token
 
 		replace_token(nil)
 
