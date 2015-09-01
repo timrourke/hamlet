@@ -14,7 +14,7 @@ stdout_path "/var/www/hamlet/logs/unicorn.log" #output logged here
 
 # Unicorn socket
 # listen "/tmp/unicorn.[app name].sock"
-listen "/tmp/unicorn.app.sock" #socket
+listen "/tmp/unicorn.hamlet.sock" #socket
 
 # Number of processes
 # worker_processes 4

@@ -1,6 +1,8 @@
 require 'sinatra/base'
 use Rack::Deflater
 # Load all controllers and models
+require './controllers/_ApplicationController.rb'
+
 Dir.glob('./{controllers,models}/*.rb').each{
 	|file| require file
 }

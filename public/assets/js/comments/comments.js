@@ -104,11 +104,9 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 		return false;
 	},
 	reply: function() {
-		alert('reply');
 		return false;
 	},
 	share: function() {
-		alert('share');
 		return false;
 	},
 	edit: function(evt) {
@@ -299,7 +297,6 @@ hamlet.blueprints.CommentFormView = Backbone.View.extend({
 		self.render();
 	},
 	render: function() {
-		alert('rendering comment form')
 		this.$el.append(this.template(this.model.attributes)).find('.commentForm').velocity('transition.slideUpIn');
 		return this;
 	},
