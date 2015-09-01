@@ -50,9 +50,20 @@ class UsersController < ApplicationController
 	end
 
 	def create_token(user)
+		# in order to use JTI you have to add iat
+		iat = Time.now.to_i
+		# Use the secret and iat to create a unique key per request to prevent replay attacks
+		jti_raw = [JWT_SECRET, iat].join(':').to_s
+		jti = Digest::MD5.hexdigest(jti_raw)
+		#save token id in redis to prevent replays and log users out later
+		HiredisController.redis_save_token_id(user.id, iat, jti)
+
 		exp = Time.now.to_i + 4 * 3600
-		exp_payload = { :user_id => user.id, :exp => exp }
-		token = JWT.encode exp_payload, JWT_SECRET, 'HS256'
+		payload = { :user_id => user.id, :exp => exp, :iat => iat, :jti => jti }
+		token = JWT.encode payload, JWT_SECRET, 'HS256'
+		puts '-------------------------token from token creation at login-------------------------'
+		puts token
+		replace_token(token)
 		token
 	end
 
@@ -158,12 +169,19 @@ class UsersController < ApplicationController
 				if (user.email_confirmed == true)
 					#success, build JWT
 
+					@returned_user = {
+						:id => user['id'],
+						:user_name => user['user_name'],
+						:user_email => user['user_email'],
+						:created => user['created']
+					}
+
 					content_type :json				
 					status 200
 					return_message = {
 						:status => 'success',
 						:message => "Welcome back, #{user.user_name}! Thanks for logging in!",
-						:user => user,
+						:user => @returned_user,
 						:token => create_token(user)
 					}
 					return_message.to_json
@@ -197,6 +215,20 @@ class UsersController < ApplicationController
 		#a token: https://auth0.com/blog/2015/03/10/blacklist-json-web-token-api-keys/
 
 		#Use hiredis to act as the key/value store for token AUD/JTI pairs
+		validate_token
+
+		puts @decoded_token
+
+		replace_token(nil)
+
+		content_type :json
+		status 200
+		return_message = {
+			:status => 'sucess',
+			:message => "You have successfully logged out."					
+		}
+		return_message.to_json
+
 	end
 
 	get '/:id' do

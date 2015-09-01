@@ -863,13 +863,13 @@ var acts = [
           "line": "(right center) More matter, with less art."
           },{
           "character": "polonius",
-          "line": "Madam, I swear I use no art at all.<br>That he is mad, 'tis true: 'tis true 'tis pity;<br>And pity 'tis, 'tis true: a foolish figure;<br>But farewell it, for I will use no art.<br>Mad let us grant him, then: and now remains<br>That we find out the cause of this effect,<br>Or, rather say, the cause of this defect,<br>For this effect defective comes by cause:<br>Thus it remains, and the remainder thus,<br>Perpend.<a href='#footnote-11' rel='bookmark' class='footnote__link'><sup>11</sup></a><br>I have a daughter, have, while she is mine,<br>Who, in her duty and obedience, mark,<br>Hath given me this: Now gather, and surmise. [Reads] To the celestial, and my soul's idol, the most beautified Ophelia,&mdash;<a href='#footnote-12' rel='bookmark' class='footnote__link'><sup>12</sup></a> That's an ill phrase, a vile phrase, beautified is a vile phrase: but you shall hear. Thus: In her excellent white bosom,<a href='#footnote-13' rel='bookmark' class='footnote__link'><sup>13</sup></a> these, &c.<a href='#footnote-14' rel='bookmark' class='footnote__link'><sup>14</sup></a>"
+          "line": "Madam, I swear I use no art at all.<br>That he is mad, 'tis true: 'tis true 'tis pity;<br>And pity 'tis, 'tis true: a foolish figure;<br>But farewell it, for I will use no art.<br>Mad let us grant him, then: and now remains<br>That we find out the cause of this effect,<br>Or, rather say, the cause of this defect,<br>For this effect defective comes by cause:<br>Thus it remains, and the remainder thus,<br>Perpend.<a href='#footnote-11' rel='bookmark' class='footnote__link'><sup>11</sup></a><br>I have a daughter, have, while she is mine,<br>Who, in her duty and obedience, mark,<br>Hath given me this: Now gather, and surmise.<br><br>[Reads] To the celestial, and my soul's idol, the most beautified Ophelia,&mdash;<a href='#footnote-12' rel='bookmark' class='footnote__link'><sup>12</sup></a><br>That's an ill phrase, a vile phrase, beautified is a vile phrase: but you shall hear. Thus:<br>In her excellent white bosom,<a href='#footnote-13' rel='bookmark' class='footnote__link'><sup>13</sup></a> these, &c.<a href='#footnote-14' rel='bookmark' class='footnote__link'><sup>14</sup></a>"
           },{
           "character": "queen",
           "line": "Came this from Hamlet to her?"
           },{
           "character": "polonius",
-          "line": "Good madam, stay awhile; I will be faithful.&mdash; [Reads.] Doubt thou the stars are fire; Doubt thou the sun doth move; Doubt truth to be a liar; But never doubt, I love. O dear Ophelia, I am ill at these numbers;<a href='#footnote-15' rel='bookmark' class='footnote__link'><sup>15</sup></a> I have not art to reckon my groans: but that I love thee best, O most best,<a href='#footnote-16' rel='bookmark' class='footnote__link'><sup>16</sup></a> believe it. Adieu. Thine evermore, most dear lady, whilst this machine is to him,<a href='#footnote-17' rel='bookmark' class='footnote__link'><sup>17</sup></a> Hamlet.<br>This, in obedience, hath my daughter shown me:<br>And more above,<a href='#footnote-18' rel='bookmark' class='footnote__link'><sup>18</sup></a> hath his solicitings,<a href='#footnote-19' rel='bookmark' class='footnote__link'><sup>19</sup></a><br>As they fell out by time, by means, and place,<br>All given to my ear."
+          "line": "Good madam, stay awhile; I will be faithful.&mdash;<br>[Reads.] Doubt thou the stars are fire;<br>Doubt thou the sun doth move;<br>Doubt truth to be a liar;<br>But never doubt, I love.<br><br>O dear Ophelia, I am ill at these numbers;<a href='#footnote-15' rel='bookmark' class='footnote__link'><sup>15</sup></a> I have not art to reckon my groans: but that I love thee best, O most best,<a href='#footnote-16' rel='bookmark' class='footnote__link'><sup>16</sup></a> believe it. Adieu.<br><br>Thine evermore, most dear lady, whilst this machine is to him,<a href='#footnote-17' rel='bookmark' class='footnote__link'><sup>17</sup></a> Hamlet.<br><br>This, in obedience, hath my daughter shown me:<br>And more above,<a href='#footnote-18' rel='bookmark' class='footnote__link'><sup>18</sup></a> hath his solicitings,<a href='#footnote-19' rel='bookmark' class='footnote__link'><sup>19</sup></a><br>As they fell out by time, by means, and place,<br>All given to my ear."
           },{
           "character": "king",
           "line": "But how hath she<br>Receiv'd his love?"
@@ -2176,73 +2176,73 @@ var acts = [
           "character": "stage_instructions",
           "line": "Enter two Clowns,<a href='#footnote-1' rel='bookmark' class='footnote__link'><sup>1</sup></a> with spades, &c. (left hand upper entrance)"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "(right) Is she to be buried in christian burial that wilfully<br>seeks her own salvation?"
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "(left) I tell thee she is; therefore make her grave<br>straight:<a href='#footnote-2' rel='bookmark' class='footnote__link'><sup>2</sup></a> the crowner<a href='#footnote-3' rel='bookmark' class='footnote__link'><sup>3</sup></a> hath set on her, and finds it christian burial."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "How can that be, unless she drowned herself in her own<br>defence?"
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Why, 'tis found so."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "It must be se offendendo;<a href='#footnote-4' rel='bookmark' class='footnote__link'><sup>4</sup></a> it cannot be else. For here<br>lies the point: If I drown myself wittingly, it argues an act: and an<br>act hath three branches; it is, to act, to do, and to perform:<a href='#footnote-5' rel='bookmark' class='footnote__link'><sup>5</sup></a><br>argal,<a href='#footnote-6' rel='bookmark' class='footnote__link'><sup>6</sup></a> she drowned herself wittingly."
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Nay, but hear you, goodman delver.<a href='#footnote-7' rel='bookmark' class='footnote__link'><sup>7</sup></a>"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Give me leave. Here lies the water; good: here stands the<br>man; good: If the man go to this water, and drown himself, it is,<br>will he, nill he, he goes,<a href='#footnote-8' rel='bookmark' class='footnote__link'><sup>8</sup></a> mark you that; but if the water come<br>to him and drown him, he drowns not himself: argal, he that is not<br>guilty of his own death shortens not his own life."
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "But is this law?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Ay, marry is't; crowner's-quest law.<a href='#footnote-9' rel='bookmark' class='footnote__link'><sup>9</sup></a>"
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Will you ha' the truth on't? If this had not been a<br>gentlewoman, she should have been buried out of christian burial."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Why, there thou say'st:<a href='#footnote-10' rel='bookmark' class='footnote__link'><sup>10</sup></a> And the more pity that great<br>folks should have countenance in this world to drown or hang<br>themselves, more than their even christian.<a href='#footnote-11' rel='bookmark' class='footnote__link'><sup>11</sup></a> Come, my spade. There<br>is no ancient gentlemen but gardeners, ditchers, and grave-makers:<br>they hold up Adam's profession."
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Was he a gentleman?<a href='#footnote-12' rel='bookmark' class='footnote__link'><sup>12</sup></a>"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "He was the first that ever bore arms. I'll put another<br>question to thee: if thou answerest me not to the purpose, confess thyself&mdash;&mdash;<a href='#footnote-13' rel='bookmark' class='footnote__link'><sup>13</sup></a>"
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Go to."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "What is he that builds stronger than either the mason, the<br>shipwright, or the carpenter?"
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "The gallows-maker; for that frame outlives a thousand tenants."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "I like thy wit well, in good faith: the gallows does well;<br>But how does it well? it does well to those that do ill: now, thou<br>dost ill to say the gallows is built stronger than the church: argal,<br>the gallows may do well to thee. To't again, come."
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Who builds stronger than a mason, a shipwright, or a carpenter?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Ay, tell me that, and unyoke.<a href='#footnote-14' rel='bookmark' class='footnote__link'><sup>14</sup></a>"
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Marry, now I can tell."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "To't."
           },{
-          "character": "secondclown",
+          "character": "second clown",
           "line": "Mass, I cannot tell."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Cudgel thy brains no more about it,<a href='#footnote-15' rel='bookmark' class='footnote__link'><sup>15</sup></a> for your dull ass<br>will not mend his pace with beating; and, when you are asked this<br>question next, say, a grave-maker, the houses that he makes, last<br>till doomsday. Go, get thee to Yaughan, and fetch me a stoup of<br>liquor.<a href='#footnote-16' rel='bookmark' class='footnote__link'><sup>16</sup></a><br>[Exit 2nd Clown, left hand upper entrance]<br>Enter HAMLET and HORATIO (left hand upper entrance)<br>First Clown digs and sings. In youth, when I did love, did love,<a href='#footnote-17' rel='bookmark' class='footnote__link'><sup>17</sup></a> Methought, it was very sweet, To contract, O, the time, for, ah, my behove O, methought, there was nothing meet."
           },{
           "character": "hamlet",
@@ -2254,7 +2254,7 @@ var acts = [
           "character": "hamlet",
           "line": "'Tis e'en so: the hand of little employment hath the daintier sense.<a href='#footnote-18' rel='bookmark' class='footnote__link'><sup>18</sup></a>"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": " But age, with his stealing steps, Hath clawed me in his clutch,<br>And hath shipped me into the land, As if I had never been such.<br>[Throws up a skull.]"
           },{
           "character": "hamlet",
@@ -2266,19 +2266,19 @@ var acts = [
           "character": "hamlet",
           "line": "Did these bones cost no more the breeding, but to play at<br>loggats with them?<a href='#footnote-19' rel='bookmark' class='footnote__link'><sup>19</sup></a> mine ache to think on't."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": " [Sings.]<br>A pick-axe and a spade, a spade, For and a shrouding sheet:<a href='#footnote-20' rel='bookmark' class='footnote__link'><sup>20</sup></a><br>O, a pit of clay for to be made For such a guest is meet.<br>[Throws up a skull.]"
           },{
           "character": "hamlet",
           "line": "There's another: Why may not that be the skull of a lawyer?<br>Where be his quiddits now, his quillets,<a href='#footnote-21' rel='bookmark' class='footnote__link'><sup>21</sup></a> his cases, his tenures,<br>and his tricks? Why does he suffer this rude knave now to knock him<br>about the sconce<a href='#footnote-22' rel='bookmark' class='footnote__link'><sup>22</sup></a> with a dirty shovel, and will not tell him of<br>his action of battery? I will speak to this fellow.&mdash;Whose grave's this, sirrah?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Mine, sir.&mdash;<br>[Sings.]<br>O, a pit of clay for to be made For such a guest is meet."
           },{
           "character": "hamlet",
           "line": "(right of grave.) I think it be thine, indeed; for thou liest<br>in't."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "You lie out on't, sir, and therefore it is not yours: for<br>my part, I do not lie in't, yet it is mine."
           },{
           "character": "hamlet",
@@ -2287,91 +2287,91 @@ var acts = [
           "character": "hamlet",
           "line": "What man dost thou dig it for?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "For no man, sir."
           },{
           "character": "hamlet",
           "line": "What woman, then?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "For none, neither."
           },{
           "character": "hamlet",
           "line": "Who is to be buried in't?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "One that was a woman, sir; but, rest her soul, she's dead."
           },{
           "character": "hamlet",
           "line": "How absolute the knave is!<a href='#footnote-23' rel='bookmark' class='footnote__link'><sup>23</sup></a> we must speak by the card,<a href='#footnote-24' rel='bookmark' class='footnote__link'><sup>24</sup></a><br>or equivocation will undo us,<br>[To HORATIO, right] How long hast thou been a grave-maker?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Of all the days i'the year, I came to't that day that our<br>last king Hamlet overcame Fortinbras."
           },{
           "character": "hamlet",
           "line": "How long's that since?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Cannot you tell that? every fool can tell that: It was the<br>very day that young Hamlet was born,<a href='#footnote-25' rel='bookmark' class='footnote__link'><sup>25</sup></a> he that is mad, and sent<br>into England."
           },{
           "character": "hamlet",
           "line": "Ay, marry, why was he sent into England?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Why, because he was mad: he shall recover his wits there;<br>or, if he do not, 'tis no great matter there."
           },{
           "character": "hamlet",
           "line": "Why?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "'Twill not be seen in him there; there the men are as mad as he."
           },{
           "character": "hamlet",
           "line": "How came he mad?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Very strangely, they say."
           },{
           "character": "hamlet",
           "line": "How strangely?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "'Faith, e'en with losing his wits."
           },{
           "character": "hamlet",
           "line": "Upon what ground?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Why, here in Denmark: I have been sexton here, man and<br>boy, thirty years."
           },{
           "character": "hamlet",
           "line": "How long will a man lie i'the earth ere he rot?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "'Faith, if he be not rotten before he die, he will last<br>you some eight year or nine year: a tanner will last you nine year."
           },{
           "character": "hamlet",
           "line": "Why he more than another?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "Why, sir, his hide is so tanned with his trade, that he<br>will keep out water a great while; and your water is a sore decayer<br>of your ill-begotten dead body. Here's a skull now, hath lain in the<br>earth three-and-twenty years."
           },{
           "character": "hamlet",
           "line": "Whose was it?"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "O, a mad fellow's it was: Whose do you think it was?"
           },{
           "character": "hamlet",
           "line": "Nay, I know not."
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "A pestilence on him for a mad rogue! he poured a flagon of<br>Rhenish on my head once. This same skull, sir, was Yorick's skull,<br>the king's jester."
           },{
           "character": "hamlet",
           "line": "This?<br>[Takes the skull.]"
           },{
-          "character": "firstclown",
+          "character": "first clown",
           "line": "E'en that."
           },{
           "character": "hamlet",

@@ -63,7 +63,29 @@ hamlet.active.createUser = function(obj) {
 
 hamlet.blueprints.CurrentUser = Backbone.Model.extend({
 	initialize: function() {
+		var self = this;
 		console.log('A CurrentUser has been born.');
+		new hamlet.blueprints.CurrentUserView({
+			model: self
+		});
+	}
+});
+
+hamlet.blueprints.CurrentUserView = Backbone.View.extend({
+	el: $('.site-header'),
+	initialize: function() {
+		var self = this;
+		this.el = $('site-header');
+		this.template = _.template($('#currentUserViewTemplate').html());
+		this.model.on('change', function() {
+			self.render();
+		});
+		self.render();
+	},
+	render: function() {
+		var self = this;
+		console.log(this)
+		this.$el.prepend(this.template(this.model.attributes))
 	}
 });
 
@@ -84,11 +106,16 @@ hamlet.active.logIn = function(obj) {
 		data: obj,
 		success: function(response) {
 
-			console.log(response.token);
+			console.log(response.token)
 
 			setToken(response.token);
 
-			hamlet.active.currentUser = new hamlet.blueprints.CurrentUser(response);
+			console.log(getToken());
+
+			$('body').removeClass('js-pushMenu--open');
+  		$('.pushMenu .utility-nav, .pushMenu .form__signup').removeClass('open');
+
+			hamlet.active.currentUser = new hamlet.blueprints.CurrentUser(response.user);
 
 			appendFormMessage(formId, response.status, response.message);
 
@@ -112,4 +139,28 @@ hamlet.active.logIn = function(obj) {
 	}
 
 	$.ajax(logInObj);
+}
+
+hamlet.active.logOut = function() {
+
+	logOutObj = {
+		url: window.location.protocol + '//' + window.location.host + '/api/users/logout',
+		dataType: 'json',
+		success: function(response) {
+
+			console.log(response)
+
+			setToken(null);
+
+			console.log(getToken());
+
+			return true;
+		},
+		error: function(error) {
+			console.log(error);
+			return false;
+		}
+	}
+
+	$.ajax(logOutObj);
 }

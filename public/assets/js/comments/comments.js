@@ -10,8 +10,9 @@ hamlet.active = hamlet.active || {};
  */
 
 hamlet.blueprints.Comment = Backbone.Model.extend({
-	initialize: function() {
+	initialize: function(model, options) {
 		console.log('A comment was born.');
+		this.parentModel = options.parentModel;
 	},
 	defaults: {
 		comment: '',
@@ -30,6 +31,7 @@ hamlet.blueprints.Comments = Backbone.Collection.extend({
 		this.on('update', function() {
 			self.fetch();
 		});
+		self.fetch();
 	},
 	url: function() {
 		return '/api/comments/act/' + this.act + '/scene/' + this.scene
@@ -51,51 +53,47 @@ hamlet.blueprints.CommentView = Backbone.View.extend({
 		console.log('A comment view was born.');
 		var self = this;
 		this.template = _.template($('#commentTemplate').html());
-		// this.model.on('sync', function() {
-		// 	self.render();
-		// });
 		self.render();
 	}, 
 	render: function() {
 		var self = this;
+
 		this.options.targetElement.append(this.$el.html(this.template(this.model.attributes)));
-		
+
+		if (typeof this.model.get('targetElementModel') != 'undefined' && this.model.get('targetElementModel').get('commentsOpen')) {
+			this.options.targetElement.parent().parent().find('.comment, span.js-commentForm-toggle, span.js-hide-comments').css({
+		 		'display':'block'
+		 	});
+		}
+
+		//console.log(this.options.parentLineView);
+
+		// if (this.model.get('open')) {
+		// 	this.options.targetElement.parent().parent().find('.comment, span.js-commentForm-toggle, span.js-hide-comments').css({
+		// 		'display':'block'
+		// 	});	
+		// }
+
 		return this;
 	},
-	downvote: function() {
+	downvote: function(e) {
+		e.preventDefault();
+		
 		this.model.save({downvotes: (this.model.get('downvotes') - 1) }, {
 			url: '/api/comments/downvote',
 			wait: true,
 			error: function(model, response, options) {
-				console.log(model)
-				console.log(response);
-				// var statusCode = response.status;
-
-				// switch (statusCode) {
-				// 	default:
-				// 		appendFormMessage(formId, response.responseJSON.status, response.responseJSON.message);
-				// 		break;
-				// }
-
 				return false;
 			}
 		});
 	},
-	upvote: function() {
+	upvote: function(e) {
+		e.preventDefault();
+		
 		this.model.save({upvotes: (this.model.get('upvotes') + 1) }, {
 			url: '/api/comments/upvote',
 			wait: true,
 			error: function(model, response, options) {
-				console.log(model)
-				console.log(response);
-				// var statusCode = response.status;
-
-				// switch (statusCode) {
-				// 	default:
-				// 		appendFormMessage(formId, response.responseJSON.status, response.responseJSON.message);
-				// 		break;
-				// }
-
 				return false;
 			}
 		});
@@ -120,9 +118,6 @@ hamlet.blueprints.CommentsView = Backbone.View.extend({
 		this.collection.on('sync', function() {
 			self.render();
 		});
-		// this.collection.on('update', function() {
-		// 	self.render();
-		// });
 	},
 	render: function() {
 		if (hamlet.active.commentItems) {
@@ -143,21 +138,27 @@ hamlet.blueprints.CommentsView = Backbone.View.extend({
 
 				var targetElementModel = hamlet.active.scene.get({ cid: $(model.targetElement).attr('data-cid') });
 
-				var commentCount = targetElementModel.get('commentCount');
+				if (typeof targetElementModel != 'undefined') {
+					var commentCount = targetElementModel.get('commentCount');	
+				}
 
 				var commentLengthInDom = $(model.targetElement + ' li.comment').length + 1;
 
 				if ( !$(model.targetElement + ' .comments__list').length ) {
 					$(model.targetElement).addClass('js-line__hasComment');
 					$(model.targetElement).append($( '<div class="comments"><span class="js-commentForm-toggle commentForm-toggle">Add a Comment +</span><span class="js-hide-comments">Hide Comments</span><ul class="comments__list"></ul></div>' ));
-					targetElementModel.set('commentCount', 1, {
+					if (typeof targetElementModel != 'undefined') {
+						targetElementModel.set('commentCount', 1, {
+							skipRender: true
+						});
+					}
+				}
+				
+				if (typeof targetElementModel != 'undefined') {
+					targetElementModel.set('commentCount', commentLengthInDom, {
 						skipRender: true
 					});
 				}
-				
-				targetElementModel.set('commentCount', commentLengthInDom, {
-					skipRender: true
-				});
 								
 				var commentItem = new hamlet.blueprints.CommentView({
 					model: model,
@@ -165,13 +166,12 @@ hamlet.blueprints.CommentsView = Backbone.View.extend({
 				}, this);
 
 				hamlet.active.commentItems.push(commentItem);
-				//targetElementModel.set('commentCount', (commentCount+1));
-				// hamlet.comments[model.get('act')] = hamlet.comments[model.get('act')] || [];
-				// hamlet.comments[model.get('act')][model.get('scene')] = hamlet.comments[model.get('act')][model.get('scene')] || [];
-				// hamlet.comments[model.get('act')][model.get('scene')][model.get('line')] = hamlet.comments[model.get('act')][model.get('scene')][model.get('line')] || [];
 
-				// hamlet.comments[model.get('act')][model.get('scene')][model.get('line')].push(commentItem);
-				//$('#line-' + model.get('act') + '-' + model.get('scene') + '-' + model.get('line') + '-' + model.get('subline')).append(commentItem.el);
+				if (typeof targetElementModel != 'undefined') {
+					model.set('targetElementModel', targetElementModel, {
+						skipRender: true
+					});
+				}
 			});
 
 		}
@@ -251,7 +251,6 @@ hamlet.blueprints.CommentFormView = Backbone.View.extend({
 	submit: function(e) {
 		e.preventDefault();
 
-		console.log('comment submit triggered.');
 		var obj = collectInputs(this.$el);
 
 		hamlet.active.createComment(obj);

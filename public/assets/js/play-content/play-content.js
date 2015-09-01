@@ -72,7 +72,7 @@ hamlet.blueprints.Scene = Backbone.Collection.extend({
 
 hamlet.blueprints.SceneView = Backbone.View.extend({
 	initialize: function() {
-		console.log('Initializing ActView.');
+		console.log('Initializing SceneView.');
 	},
 	render: function() {
 		var self = this;
@@ -124,6 +124,9 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 	showCommentsForm: function(evt) {
 		//return early unless 'dismiss' button is clicked.
 		//prevents undesired closing of comment form modal.
+		this.model.set('commentsOpen', true, {
+			skipRender: true
+		});
 		if (this.model.get('commentCount') > 0 && !$(evt.target).hasClass('js-commentForm-toggle')) {
 			return;
 		}
@@ -131,8 +134,9 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 			hamlet.active.commentFormView.close();
 		}
 		var self = this;
-		var subline_number = $(evt.target).parent().parent().parent().data('subline_number');
-		console.log(subline_number);
+
+		var subline_number = $(this.el).find('.line__single-line').data('subline_number');
+
 		this.model.attributes.subline_number = subline_number;
 		hamlet.active.commentForm = new hamlet.blueprints.CommentForm(this.model.attributes);
 		hamlet.active.commentFormView = new hamlet.blueprints.CommentFormView({
@@ -140,10 +144,16 @@ hamlet.blueprints.LineView = Backbone.View.extend({
 			model: hamlet.active.commentForm
 		});
 	},
-	toggleCommentFormToggle: function() {
-		this.$el.find('.commentForm-toggle').toggleClass('open');
+	toggleCommentFormToggle: function(evt) {
+		if ($(evt.target).hasClass('line__single-line')) {
+			this.$el.find('.commentForm-toggle').toggleClass('open');		
+		}
 	},
 	hideComments: function() {
+		$('.commentForm-toggle').removeClass('open');
+		this.model.set('commentsOpen', false, {
+			skipRender: true
+		});
 		this.$el.find('.comment, span.js-commentForm-toggle, span.js-hide-comments').velocity('transition.slideUpOut');
 	}
 });

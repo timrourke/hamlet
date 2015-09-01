@@ -8,36 +8,20 @@ $.ajaxSetup({
 	}
 });
 
-// Method to override Backbone's .sync() method with additional headers containing our token
-// Store "old" sync function
-var backboneSync = Backbone.sync;
-
-// Now override
-Backbone.sync = function (method, model, options) {
-  /*
-   * "options" represents the options passed to the underlying $.ajax call         
-   */
-  var token = window.localStorage.getItem('token');
-
-  if (token) {
-    options.headers = {
-      'x-access-token': token
-    }
-  }
-
-  // call the original function
-  backboneSync(method, model, options);
-};
-
 function setToken(token) {
 
-	$.ajaxSetup({
+	return (function(token) {
+		console.log('running closure to set token.')
+		
+		window.localStorage.setItem('token', token);
 
-	  headers: { 'x-access-token': hamlet.token }
-	   
-	});
+		$.ajaxSetup({
+			headers: {
+				'x-access-control': window.localStorage.getItem('token')
+			}
+		});
 
-	return window.localStorage.setItem('token', token);
+	})(token);
 }
 
 function getToken() {
@@ -182,6 +166,12 @@ $(document).on('ready', function() {
 	 *	Register form submit handlers
 	 *
 	 */
+
+	$('#js-logout').on('click', function(e) {
+		e.preventDefault();
+
+		hamlet.active.logOut();
+	});
 
 	$('#js-login-form').on('submit', function(e) {
 		e.preventDefault();
