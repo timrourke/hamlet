@@ -1,0 +1,2 @@
+JWT_SECRET = 'Super long crazy secret here!' #Make this a crazy-long random-ass alphanumeric string
+JWT_LEEWAY = 30 #This variable allows for some leeway in evaluating a JWT's expiration - helps to prevent issues caused by system clocks being improperly configured in rare cases

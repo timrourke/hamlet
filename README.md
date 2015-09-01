@@ -42,3 +42,14 @@ In a second pass, I would like to rearchitect the application's components to ta
 - [jwt](https://github.com/jwt/ruby-jwt) - a JSON Web Token implementation in Ruby
 - [pony](https://github.com/benprew/pony) - The express way to send mail from Ruby.
 - [hiredis](https://github.com/redis/hiredis-rb) Ruby wrapper for [hiredis](https://github.com/redis/hiredis)
+
+## Installation instructions
+
+1. Git clone into an empty directory.
+2. Run `bundle install && npm install && bower install` with appropriate permissions.
+3. Using the `config-example/` folder as a guide, create a folder in the root of the project called `.config/`. This folder is ignored by git by default to prevent publishing login credentials to GitHub or a public environment. Use the included example files as a template and complete with config parameters appropriate for your environment.
+4. Run a redis server and a postgresql server, ideally as daemonized services.
+5. Open the postgres terminal (`psql` in terminal) and run your migration by using the following command: `\i "/path/to/project/migrations/migrations.sql"`
+6. Quit postgres and run `bundle exec rackup` in the root folder of the project
+7. Navigate to `localhost:9292`, or whatever URL you've configured Rack/Unicorn/etc. to serve the project to.
+8. Read Hamlet and cry into your sherry.
