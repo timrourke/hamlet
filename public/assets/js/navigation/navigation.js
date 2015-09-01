@@ -47,14 +47,13 @@ hamlet.blueprints.ActNavigationItemView = Backbone.View.extend({
 			self.render();
 		});
 		self.render();
+		
 	},
 	render: function() {
 		this.$el.html(this.template(this.model.attributes))
 	},
 	clickEvent: function(e) {
 		var self = this;
-
-		console.log(e.target)
 
 		if (!$(e.target).hasClass('pushMenu__header')) {
 			return;

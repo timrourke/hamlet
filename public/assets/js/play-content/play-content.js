@@ -82,7 +82,12 @@ hamlet.blueprints.SceneView = Backbone.View.extend({
 			}, this);
 			self.$el.append(lineView.el);
 		});
+		
 		self.$el.velocity('transition.slideLeftIn');
+		
+		$('body').removeClass('js-pushMenu--open');
+  	$('.pushMenu .utility-nav, .pushMenu .form__signup').removeClass('open');
+		
 		return this;
 	}
 });

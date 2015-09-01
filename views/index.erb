@@ -42,7 +42,7 @@
 				<ul id="play__navigation" class="pushMenu__main"></ul>
 				<div class="utility-nav">
 					<h4 class="menu-title">Log in</h3>
-					<form action="/api/users/login" method="post" id="js-login-form">
+					<form class="form__login" action="/api/users/login" method="post" id="js-login-form">
 						<div class="form__feedback"></div>
 						<label for="login-form__user_email">
 							Your email
@@ -97,12 +97,7 @@
 			<div class="inner-wrapper">
 				<div class="site-header">
 					<div class="currentUser-panel"></div>
-					<div class="site-branding">
-						<h1 class="site-title">
-							<a href="/" rel="bookmark">Hamlet,</a>
-						</h1>
-						<h4 class="site-subtitle">Prince of Denmark.</h4>
-					</div>
+					<div class="site-header__wrapper"></div>
 				</div>
 
 				<div class="play col-group">
@@ -113,6 +108,175 @@
 		</div>
 	</div>
 
+
+	<script type="text/template" id="homePageHeaderTemplate">
+		<div class="site-branding site-branding--home">
+			<h1 class="site-title">
+				<a href="/" rel="bookmark">Hamlet,</a>
+			</h1>
+			<h4 class="site-subtitle">Prince of Denmark.</h4>
+		</div>
+		<div class="current-scene-indicator">
+			<span class="current-scene-indicator__act">Act <%%= act %></span> - 
+			<span class="current-scene-indicator__scene">Scene <%%= scene %></span>
+		</div>	 
+	</script>
+
+	<script type="text/template" id="aboutPageHeaderTemplate">
+		<div class="site-branding site-branding&mdash;about">
+			<div class="site-logo">
+				<svg viewBox="0 0 100 100" class="shape-skull">
+					<use xlink:href="#final_skull"></use>
+				</svg>
+			</div>
+			<h5 class="site-author">Shakespeare&rsquo;s Tragedy of</h5>
+			<h1 class="site-title">
+				<a href="/" rel="bookmark">Hamlet,</a>
+			</h1>
+			<h4 class="site-subtitle">Prince of Denmark.</h4>
+			<p class="site-subtext">arranged for representation at<br>
+			the Royal Princess’s Theatre<br>
+			with explanatory notes, by</p>
+			<h5 class="site-arranger">Charles Kean, F.S.A.</h5>
+			<h6 class="site-performance-date">As performed on Monday, January 10, 1859</h6>
+		</div>
+		<div class="intro__text">
+			<h3>Dramatis Personæ </h3>
+			<table>
+				<tbody>
+					<tr>
+						<td class="character-name">CLAUDIUS</td>
+						<td>(King of Denmark)</td>
+					</tr>
+					<tr>
+						<td class="character-name">HAMLET</td>
+						<td>(son to the former and nephew to the present King)</td>
+					</tr>
+					<tr>
+						<td class="character-name">POLONIUS</td>
+						<td>(Lord Chamberlain)</td>
+					</tr>
+					<tr>
+						<td class="character-name">HORATIO</td>
+						<td>(friend to Hamlet)</td>					
+					</tr>
+					<tr>
+						<td class="character-name">LAERTES</td>
+						<td>son to Polonius</td>
+					</tr>
+					<tr>
+						<td class="character-name">ROSENCRANTZ</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="character-name">GUILDENSTERN</td>
+						<td>(Courtiers)</td>
+					</tr>
+					<tr>
+						<td class="character-name">OSRICK</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="character-name">PRIEST</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="character-name">MARCELLUS</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="character-name">BERNARDO</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="character-name">FRANCISCO</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="character-name">GHOST OF HAMLET&rsquo;S FATHER</td>
+						<td></td>
+					</tr>
+					<tr>
+					  <td class="character-name">FIRST GRAVEDIGGER</td>
+					  <td></td>
+					</tr>
+					<tr>
+					  <td class="character-name">SECOND GRAVEDIGGER</td>
+					  <td></td>
+					</tr>
+					<tr>
+					  <td class="character-name">FIRST PLAYER</td>
+					  <td></td>
+					</tr>
+					<tr>
+					  <td class="character-name">SECOND PLAYER</td>
+					  <td></td>
+					</tr>
+					<tr>
+					  <td class="character-name">GERTRUDE</td>
+					  <td>Queen of Denmark, and mother of Hamlet</td>
+					</tr>
+					<tr>
+					  <td class="character-name">OPHELIA</td>
+					  <td>daughter of Polonius</td>
+					</tr>
+					<tr>
+					  <td class="character-name">ACTRESS</td>
+					  <td></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>Preface.</h3>
+
+			<p class="typl8-drop-cap">The play of <em>Hamlet</em> is above all others the most stupendous monument
+			of Shakespeare&rsquo;s genius, standing as a beacon to command the wonder
+			and admiration of the world, and as a memorial to future generations,
+			that the mind of its author was moved by little less than inspiration.
+			<em>Lear</em>, with its sublime picture of human misery;&mdash;<em>Othello</em>, with its
+			harrowing overthrow of a nature great and amiable;&mdash;<em>Macbeth</em>, with
+			its fearful murder of a monarch, whose "virtues plead like angels
+			trumpet-tongued against the deep damnation of his taking
+			off,"&mdash;severally exhibit, in the most pre-eminent degree, all those
+			mighty elements which constitute the perfection of tragic art&mdash;the
+			grand, the pitiful, and the terrible. <em>Hamlet</em> is a history of mind&mdash;a
+			tragedy of thought. It contains the deepest philosophy, and most
+			profound wisdom; yet speaks the language of the heart, touching the
+			secret spring of every sense and feeling. Here we have no ideal
+			exaltation of character, but life with its blended faults and
+			virtues,&mdash;a gentle nature unstrung by passing events, and thus
+			rendered "out of tune and harsh."</p>
+
+			<p>The original story of Hamlet is to be found in the Latin pages of the
+			Danish historian, Saxo Grammaticus, who died in the year 1208.
+			Towards the end of the sixteenth century, the French author, Francis
+			de Belleforest, introduced the fable into a collection of novels,
+			which were translated into English, and printed in a small quarto
+			black letter volume, under the title of the "Historie of Hamblett,"
+			from which source Shakespeare constructed the present tragedy.</p>
+
+			<p>Saxo has placed his history about 200 years before Christianity, when
+			barbarians, clothed in skins, peopled the shores of the Baltic. The
+			poet, however, has so far modernised the subject as to make Hamlet a
+			Christian, and England tributary to the "sovereign majesty of
+			Denmark." A date can therefore be easily fixed, and the costume of
+			the tenth and eleventh centuries may be selected for the purpose.
+			There are but few authentic records in existence, but these few
+			afford reason to believe that very slight difference existed between
+			the dress of the Dane and that of the Anglo-Saxon of the same period.</p>
+
+			<p>Since its first representation, upwards of two centuries and a half
+			ago, no play has been acted so frequently, or commanded such
+			universal admiration. It draws within the sphere of its attraction
+			both the scholastic and the unlearned. It finds a response in every
+			breast, however high or howeve`r humble. By its colossal aid it exalts
+			the drama of England above that of every nation, past or present. It
+			is, indeed, the most marvellous creation of human intellect.</p>
+
+			<h6>CHARLES KEAN.</h6>
+			
+		</div>
+	</script>
 
 
 	<script type="text/template" id="currentUserViewTemplate">
@@ -206,6 +370,8 @@
 		</form>
 	</script>
 
+	<script type="text/javascript" src="/assets/js/home/home.js"></script>
+	<script type="text/javascript" src="/assets/js/about/about.js"></script>
 	<script type="text/javascript" src="/assets/js/play-content/play-content.js"></script>
 	<script type="text/javascript" src="/assets/js/modals/modals.js"></script>
 	<script type="text/javascript" src="/assets/js/navigation/navigation.js"></script>

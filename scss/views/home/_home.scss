@@ -6,3 +6,18 @@
 .currentUser a {
 	font-size:0.8em;
 }
+
+.intro__text {
+	width:100%;
+	padding:1em;
+	max-width:32em;
+	margin:0 auto;
+	.character-name {
+		@extend %typl8-ot--smcp;
+		text-transform: lowercase;
+	}
+	h3 {
+		text-align:center;
+		margin-top:1em;
+	}
+}

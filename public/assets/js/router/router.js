@@ -10,11 +10,19 @@ hamlet.active = hamlet.active || {};
 hamlet.active.ActRouter = Backbone.Router.extend({
 	routes: {
 		"": "index",
+		"about": "about",
 		"users/confirm-email/:uuid": "confirmUser",
 		"act/:act/scene/:scene": "act"
 	},
 
 	index: function() {
+		//Init Home page view
+		hamlet.active.homePageView = hamlet.active.homePageView || new hamlet.blueprints.HomePageView();
+		hamlet.active.homePageView.render({
+			act: 1,
+			scene: 1
+		});
+
 		if (hamlet.active.commentsView) {
 			hamlet.active.commentsView.close()
 		}
@@ -47,7 +55,20 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 		}
 	},
 
+	about: function() {
+		//Init About page view
+		hamlet.active.aboutPageView = hamlet.active.aboutPageView || new hamlet.blueprints.AboutPageView();
+		hamlet.active.aboutPageView.render();
+	},
+
 	act: function(act, scene) {
+		//Init Home page view
+		hamlet.active.homePageView = hamlet.active.homePageView || new hamlet.blueprints.HomePageView();
+		hamlet.active.homePageView.render({
+			act: act,
+			scene: scene
+		});
+
 		if (hamlet.active.commentsView) {
 			hamlet.active.commentsView.close()
 		}

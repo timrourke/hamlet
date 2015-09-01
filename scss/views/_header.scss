@@ -2,6 +2,39 @@
 	height:15em;
 }
 
+.site-logo {
+	margin:-2em auto 2em auto;
+	width:5em;
+}
+
+.site-author,
+.site-of {
+	font-weight:400;
+}
+
+.site-of {
+	text-transform: uppercase;
+}
+
+.site-author,
+.site-of,
+.site-arranger,
+.site-subtext,
+.site-performance-date {
+	font-family:$serif;
+	text-align:center;
+}
+
+.site-arranger {
+	text-transform: uppercase;
+}
+
+.site-performance-date {
+	@extend %typl8-ot--smcp;
+	font-weight: 400;
+	text-transform:lowercase;
+}
+
 .site-title {
 	font-weight:600; 
 	padding:0.125em 0 0 0;
@@ -26,4 +59,24 @@
 .site-title a,
 .site-subtitle {
 	color:$blue;
+}
+
+.site-branding--home {
+	.site-title {
+		@extend .typl8-alpha;
+		margin-bottom:0.25em;
+	}
+	.site-subtitle {
+		@extend .typl8-epsilon;
+	}
+}
+
+.site-branding--about {
+	.site-title {
+		margin-top:0.25em;
+	}
+}
+
+.current-scene-indicator {
+	text-align: center;
 }
