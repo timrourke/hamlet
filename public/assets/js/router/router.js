@@ -56,9 +56,27 @@ hamlet.active.ActRouter = Backbone.Router.extend({
 	},
 
 	about: function() {
-		//Init About page view
-		hamlet.active.aboutPageView = hamlet.active.aboutPageView || new hamlet.blueprints.AboutPageView();
-		hamlet.active.aboutPageView.render();
+		if (hamlet.active.commentsView) {
+			hamlet.active.commentsView.close()
+		}
+		if (hamlet.active.sceneView) {
+			hamlet.active.sceneView.$el.velocity('transition.slideLeftOut', {
+				display: 'block',
+				complete: function() {
+					hamlet.active.sceneView.close();	
+
+					//Init About page view
+					hamlet.active.aboutPageView = hamlet.active.aboutPageView || new hamlet.blueprints.AboutPageView();
+					hamlet.active.aboutPageView.render();
+					
+				}
+			});
+		} else {
+			//Init About page view
+			hamlet.active.aboutPageView = hamlet.active.aboutPageView || new hamlet.blueprints.AboutPageView();
+			hamlet.active.aboutPageView.render();
+		}
+		
 	},
 
 	act: function(act, scene) {

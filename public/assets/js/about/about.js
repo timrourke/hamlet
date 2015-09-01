@@ -14,6 +14,6 @@ hamlet.blueprints.AboutPageView = Backbone.View.extend({
 		this.template = _.template($('#aboutPageHeaderTemplate').html());
 	},
 	render: function() {
-		this.$el.html(this.template())
+		this.$el.html(this.template()).velocity('transition.slideLeftIn');
 	}
 });

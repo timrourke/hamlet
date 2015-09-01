@@ -38,8 +38,12 @@
 
 		<div class="wrapper">
 			<nav class="pushMenu">
-				<h4 class="menu-title">Hamlet</h4>
-				<ul id="play__navigation" class="pushMenu__main"></ul>
+				<h4 class="site-title menu-title"><a href="/" rel="bookmark">Hamlet</a></h4>
+				<ul id="play__navigation" class="pushMenu__main">
+					<a class="pushMenu__header pushMenu__header--link" href="/about" rel="bookmark"><button class="js-pushMenu__main-toggle pushMenu__main-toggle" type="button">
+						<h4 class="pushMenu__header">About</h4>
+					</button></a>
+				</ul>
 				<div class="utility-nav">
 					<h4 class="menu-title">Log in</h3>
 					<form class="form__login" action="/api/users/login" method="post" id="js-login-form">

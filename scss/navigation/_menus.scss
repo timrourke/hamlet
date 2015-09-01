@@ -3,10 +3,15 @@
   transition:transform 0.3s ease-in-out;
 }
 
+.pushMenu .site-title,
 .menu-title {
   text-transform: uppercase;
+  text-align: left;
   margin:0.425em 0.25em 0.25em 0.25em;
   color:lighten($blue, 5%);
+  a {
+    color:lighten($blue, 5%);
+  }
 }
 
 .js-pushMenu--open .wrapper{
@@ -94,6 +99,11 @@ button.pushMenu__main-toggle {
   .open & {
     color:$yellow;
   }
+}
+
+.pushMenu__header--link {
+  line-height: inherit;
+  padding:0;
 }
 
 .pushMenu__sub-item {
