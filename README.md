@@ -1,5 +1,7 @@
 # Hamlet
 
+![https://raw.githubusercontent.com/timrourke/hamlet/master/header.jpg](https://raw.githubusercontent.com/timrourke/hamlet/master/header.jpg)
+
 See the project online at [hamlet.timstack.com](hamlet.timstack.com).
 
 Hamlet, cleverly named after the play of which it is the subject, is a Backbone.js application built with a RESTful Sinatra JSON API backend.
