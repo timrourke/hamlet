@@ -217,6 +217,7 @@ hamlet.active.createComment = function(obj) {
 
 		success: function(model, response, options){
 			appendFormMessage(formId, model.get('status'), model.get('message'));
+			return false;
 		},
 		error: function(model, response, options) {
 			var statusCode = response.status;
@@ -255,6 +256,7 @@ hamlet.active.editComment = function(model) {
 			$(formId).velocity('transition.slideUpOut', {
 				complete: function() {
 					$(formId).remove();
+					return false;
 				}
 			});
 		},
@@ -271,7 +273,7 @@ hamlet.active.editComment = function(model) {
 		}
 	});
 
-	return true;
+	return false;
 };
 
 hamlet.blueprints.CommentForm = Backbone.Model.extend({
